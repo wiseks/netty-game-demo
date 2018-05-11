@@ -1,0 +1,47 @@
+option java_package = "xn.protobuf.monster";
+option optimize_for = SPEED;
+
+//获取场景的所有怪物
+message MonsterGetAllReqMsg_13201 {
+}
+
+//返回场景的所有怪物
+message MonsterGetAllResMsg_13202 {
+	repeated MonsterData monsterList=1; //怪物列表
+}
+
+//主动下发生成怪物
+message MonsterCreateResMsg_13204 {
+	optional MonsterData monster=1; //怪物
+}
+
+//主动下发更新怪物状态
+message MonsterStateResMsg_13206 {
+	optional int32 id=1; //怪物唯一id
+	optional int32 state=2; //1空闲 2战斗中 3死亡（客户端要移除掉）
+	optional int32 mapId=3; //所在场景id
+}
+
+//怪物信息
+message MonsterData {
+	optional int32 id=1; //怪物唯一id
+	optional int32 monsterId=2; //怪物配置表id
+	optional int32 mapId=3; //所在场景id
+	optional int32 state=4; //1空闲 2战斗中 3死亡（客户端要移除掉）
+	optional float x=5; //出生x坐标
+	optional float y=6; //出生y坐标
+	optional float z=7; //出生z坐标
+}
+
+
+//主动下发生成怪物
+message MonsterCreateNewResMsg_13207 {
+	repeated MonsterDataNew monster=1; //怪物
+}
+
+message MonsterDataNew{
+	optional int32 id=1; //怪物唯一id
+	optional int32 senceId=2; //所在场景id
+	optional float x=3; //出生x坐标
+	optional float y=4; //出生y坐标
+}

@@ -1,0 +1,116 @@
+option java_package = "xn.protobuf.task";
+option optimize_for = SPEED;
+
+import "PlayerMsg.proto";
+
+//请求获取可接任务列表
+message TaskCanAcceptListReqMsg_20001 {
+}
+
+//返回可接任务列表
+message TaskCanAcceptListResMsg_20002 {
+	repeated TaskCanAcceptData taskList=1; //可接任务id列表
+}
+
+//接任务
+message TaskAcceptReqMsg_20003 {
+	optional int32 taskId=1;
+}
+
+//返回接任务信息
+message TaskAcceptResMsg_20004 {
+	optional int32 result=1; //1成功接取 0系统异常 -1等级不足 -2阵营不满足 -3种族不满足 -4职业不满足 -5前置任务未完成 -6不能重复接任务 -7任务不存在 -8背包格子满了 -9任务未开启 -10次数已用完
+	optional TaskData taskData=2;
+	repeated TaskNpcStateData stateList=3; //成功后，刷新npc任务状态
+}
+
+//交任务
+message TaskDeliverReqMsg_20005 {
+	optional int32 taskId=1;
+}
+
+//返回交任务信息
+message TaskDeliverResMsg_20006 {
+	optional int32 result=1; //结果 1成功 0未满足交任务状态 -1背包满了
+	optional int32 taskId=2; //任务id
+	repeated TaskNpcStateData stateList=3; //成功后，刷新npc任务状态
+	optional PlayerBaseData playerBaseData=4; //玩家基本数据
+	optional PlayerFightData playerFightData=5; //玩家战斗相关数值
+}
+
+//放弃任务
+message TaskAbandonReqMsg_20007 {
+	optional int32 taskId=1;
+}
+
+//返回放弃任务信息
+message TaskAbandonResMsg_20008 {
+	optional int32 result=1; //结果 1成功 0该任务不能放弃
+	repeated TaskNpcStateData stateList=2; //成功后，刷新npc任务状态
+	optional int32 taskId=3; //放弃任务id
+	optional TaskCanAcceptData task=4; //可接任务
+}
+
+//获取场景npc任务状态
+message TaskGetNpcStateReqMsg_20009 {
+	optional int32 mapId=1; //地图id
+}
+
+//返回场景npc任务状态
+message TaskGetNpcStateResMsg_20010 {
+	repeated TaskNpcStateData stateList=1; //npc任务状态
+}
+
+//下发npc任务状态（主动下发）
+message TaskUpdateNpcStateResMsg_20012 {
+	repeated TaskNpcStateData stateList=1; //npc任务状态
+}
+
+//下发更新任务数据 （主动下发）
+message SendUpdateTaskDataResMsg_20014 {
+	optional UpdateTaskData updateTaskData=1; //更新任务数据
+}
+
+//更新任务数据
+message UpdateTaskData {
+	repeated TaskData taskData=1; //任务数据
+	optional bool freshState=2; //是否需要刷新状态
+	repeated TaskNpcStateData stateList=3; //当freshState=true，刷新npc任务状态 
+}
+
+//任务数据
+message TaskData {
+	optional int32 taskId=1; //任务id
+	optional int32 state=2; //任务状态（0不可接、1可接、 2未完成、 3可交、4已交(完成)、 5失败）
+	optional int32 time=3; //剩余时间（秒），-1为无限制, 时间为0就是失败了
+	repeated TaskCondition condition=4; //任务条件
+	optional int32 deliverNpcId=5; //交任务的npcId
+}
+
+//任务条件
+message TaskCondition {
+	optional int32 type=1; //1npc 2怪物 3道具
+	optional int32 targetId=2; //目标id（npc、怪物、道具等等）
+	optional int32 count=3; //当前数量
+	optional int32 maxCount=4; //最大数量
+	
+	optional string trace=5; //追踪目标（字符串，前端自己解析）
+}
+
+//可接任务数据
+message TaskCanAcceptData {
+	optional int32 taskId=1; //任务id
+	optional int32 npcId=2; //npcid
+}
+
+//NPC身上的任务状态
+message TaskNpcStateData {
+	optional int32 npcId=1;
+	repeated TaskStateData taskStateList=2;
+}
+
+//任务状态
+message TaskStateData {
+	optional int32 taskId=1; //任务id
+	optional int32 state=2; //任务状态（0不可接、1可接、 2未完成、 3可交、4已交(完成)、 5失败）
+}

@@ -1,0 +1,112 @@
+option java_package = "xn.protobuf.map";
+option optimize_for = SPEED;
+
+//下发通知有人进入你所在的地图
+message MapPlayerDataInResMsg_13102 {
+	optional MapPlayerData playerData=1; //角色场景基本信息
+}
+
+//下发通知有人离开你所在的地图
+message MapPlayerDataOutResMsg_13104 {
+	optional int32 playerId=1; //离开角色的playerId
+}
+
+//请求移动
+message MapPlayerMoveReqMsg_13105 {
+	optional float x=1; //终点x坐标
+	optional float y=2; //终点y坐标
+	optional float z=3; //终点z坐标
+}
+
+//下发移动数据
+message MapMoveDataResMsg_13108 {
+	repeated MapMoveData moveData=1; //移动数据
+}
+
+//请求跳转地图
+message MapPlayerSkipReqMsg_13111 {
+	optional int32 PortalId=1; //传送点id
+}
+
+//跳转地图信息
+message MapPlayerSkipResMsg_13112 {
+	optional MapPlayerData selfMapData=1; //自己的场景信息
+	repeated MapPlayerData otherMapData=2; //场景其它人的基本信息
+	optional int32 targetPortalId=3; //目标传送点id
+}
+
+//下发通知其他人刷新此角色等级
+message MapPlayerUpgraedLevelResMsg_13114 {
+	optional int32 playerId=1; //角色id
+	optional int32 mapId=2; //所在地图ID
+	optional int32 level=3; //角色等级
+}
+
+//下发更新角色场景基本信息
+message MapUpdatePlayerDataResMsg_13116 {
+	optional MapPlayerData playerData=1;
+}
+
+//角色场景基本信息
+message MapPlayerData {
+	optional int32 playerId=1; //角色id
+	optional int32 modelId=2; //配置表模型id（职业id）
+	optional string playerName=3; //角色名称
+	optional float x=4;
+	optional float y=5;
+	optional float z=6;
+	optional int32 mapId=7; //所在地图ID
+	optional int32 level=8; //角色等级
+	optional int32 title=9; //角色称号
+	optional string societyName=10; //帮会名
+	repeated int32 equipId=11; //装备id（武器id，盔甲id） ,没有穿传0
+}
+
+//角色移动信息
+message MapMoveData {
+	optional int32 playerId=1; //角色id（数据库id）
+	optional int32 modelId=2; //职业id
+	repeated MoveData dataList=3;  //移动数据列表
+}
+
+//移动信息
+message MoveData {
+	optional float x=1; //终点x坐标
+	optional float y=2; //终点y坐标
+	optional float z=3; //终点z坐标
+	optional int64 time=4; //返回时间
+	optional int32 mapId=5; //地图id
+}
+
+//下发移动信息
+message PlayerMoveNewResMsg_13117{
+
+	optional MapMoveDataNew data=1;
+}
+
+//移动
+message PlayerMoveNewReqMsg_13118{
+
+	optional int32 x=1;
+	
+	optional int32 y=2;
+}
+
+//进入场景
+message PlayerEnterSenceReqMsg_13119{
+
+	optional int32 senceId=1;
+}
+
+//角色移动信息
+message MapMoveDataNew {
+	optional int32 playerId=1; //角色id（数据库id）
+	repeated MoveDataNew dataList=2;  //移动数据列表
+}
+
+//移动信息
+message MoveDataNew {
+	optional float x=1; //终点x坐标
+	optional float y=2; //终点y坐标
+	optional int32 senceId=3; //地图id
+}

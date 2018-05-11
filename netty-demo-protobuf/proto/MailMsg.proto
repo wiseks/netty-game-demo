@@ -1,0 +1,108 @@
+option java_package = "xn.protobuf.mail";
+option optimize_for = SPEED;
+
+import "PlayerMsg.proto";
+
+message MailData{
+
+	optional int32 id=1;
+	
+	//0表示未读，1表示已读
+	optional int32 readType=2;
+	
+	//0表示没附件可以领取，1表示可以领取附件，2表示已经领附件
+	optional int32 receiveType=3;
+	
+	//标题
+	optional string title=4;
+	
+	//内容
+	optional string content=5;
+	
+	//奖励(和礼包配置表一样)
+	optional string awards=6;
+	
+	//发件时间,yyyy-MM-dd
+	optional string sendDate=7;
+	
+	//邮件类型（1系统 2活动 3玩法）
+	optional int32 mailType=8; 
+
+}
+
+//请求邮件列表
+message MailListReqMsg_13401{
+
+}
+
+//返回邮件列表信息
+message MailListResMsg_13402{
+
+	repeated MailData dataList=1;
+}
+
+//请求阅读邮件
+message MailReadReqMsg_13403{
+
+	optional int32 mailId=1;
+}
+
+//返回邮件信息
+message MailReadResMsg_13404{
+
+	//返回已阅读ID
+	optional int32 mailId=1;
+	optional int32 readType=2;
+}
+
+//请求领取邮件奖励
+message MailReceiveReqMsg_13405{
+	
+	optional int32 mailId=1;
+}
+
+//返回领取邮件奖励结果
+message MailReceiveResMsg_13406{
+	optional int32 mailId=1;
+	optional int32 receiveType=2;
+	optional PlayerBaseData playerBaseData=3; //玩家基本数据
+}
+
+//请求删除邮件
+message MailDeleteReqMsg_13407{
+	
+	optional int32 mailId=1;
+}
+
+//返回删除结果
+message MailDeleteResMsg_13408{
+	optional int32 mailId=1;
+}
+
+//请求发送邮件(后端测试使用,不开放)
+message MailSendReqMsg_13409{
+	optional int32 sendPlayerId =1;
+	optional int32 receivePlayerId=2;
+	optional int32 type=3;
+	optional string mailTitle=4;
+	optional string mailContent=5;
+	optional string awards=6;
+}
+
+//返回发送结果
+message MailSendResMsg_13410{
+
+	optional MailData data=1;
+}
+
+
+//一键领取所有邮件奖励
+message MailReceiveAllReqMsg_13411{
+}
+
+//返回领取邮件奖励结果
+message MailReceiveAllResMsg_13412{
+	optional PlayerBaseData playerBaseData=1; //玩家基本数据
+}
+
+

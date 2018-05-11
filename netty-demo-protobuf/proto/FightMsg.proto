@@ -1,0 +1,28 @@
+option java_package = "xn.protobuf.fight";
+option optimize_for = SPEED;
+
+import "AwardMsg.proto";
+
+//请求pve战斗
+message FightSinglePVEReqMsg_6101 {
+	optional int32 id=1; //怪物唯一id
+}
+
+//返回请求pev战斗结果
+message FightSinglePVEResMsg_6102 {
+	optional int32 reulst=1; //1进入战斗 2怪物战斗中 3怪物不存在
+	optional int32 id=2; //怪物唯一id
+}
+
+//发送单人pve战斗结果
+message FightSinglePVEResultReqMsg_6103 {
+	optional string report=1; //战斗过程(战报)
+	optional int32 id=2; //怪物唯一id
+	optional int32 result=3; //战斗结果  1胜利 -1失败 0平局(测试阶段使用，正式还是需要解析战报内容)
+}
+
+//返回单人pve战斗结果
+message FightSinglePVEResultResMsg_6104 {
+	optional int32 result=1; //战斗结果  1胜利 -1失败 0平局
+	repeated AwardItemData dropList=2; //掉落物品
+}

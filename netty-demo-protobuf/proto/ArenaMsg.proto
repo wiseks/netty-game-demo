@@ -1,0 +1,145 @@
+option java_package = "xn.protobuf.arena";
+option optimize_for = SPEED;
+
+import "PlayerMsg.proto";
+
+//请求竞技场首页数据
+message ArenaInfoReqMsg_1001 {
+}
+
+//返回竞技场首页数据
+message ArenaInfoResMsg_1002 {
+	optional int32 myRank=1; //我的排名
+	optional int32 myStage=2;  //我的段位(1青铜 2白银 3黄金 4铂金 5钻石)
+	optional int32 honor=3; //勋章
+	optional int32 count=4; //剩余挑战次数
+	optional int32 maxCount=5; //最大挑战次数
+	optional int32 buyGold=6; //购买次数所需钻石数
+	optional ArenaAwardData myAward=7; //我的排名奖励
+	optional bool jinji=8; //是否显示晋级资格
+}
+
+//请求排位匹配
+message ArenaRankMatchReqMsg_1003 {
+}
+
+//返回排位匹配
+message ArenaRankMatchResMsg_1004 {
+	repeated ArenaRoleData roleDataList=1; //对手列表信息（0~3个）
+}
+
+//请求重置竞技场次数
+message ArenaBuyCountReqMsg_1005 {
+}
+
+//返回重置竞技场次数结果
+message ArenaBuyCountResMsg_1006 {
+	optional int32 count=1; //剩余挑战次数
+	optional int32 buyGold=2; //购买次数所需元宝数
+	optional PlayerBaseData playerBaseData=3; //玩家基本数据
+}
+
+//请求竞技场日志
+message ArenaFightLogReqMsg_1007 {
+}
+
+//返回竞技场日志数据
+message ArenaFightLogResMsg_1008 {
+	repeated ArenaLogData logList=1; //日志数据
+}
+
+//请求竞技场排行榜
+message ArenaRankReqMsg_1009 {
+}
+
+//返回竞技场排行榜数据
+message ArenaRankResMsg_1010 {
+	repeated ArenaRoleData rankList=1; //排行榜列表
+}
+
+
+//竞技场挑战对手
+message ArenaChallengeReqMsg_1011 {
+	optional int32 targetId=1; //对手玩家的id(玩家数据库id)
+}
+
+//返回竞技场战斗信息
+message ArenaChallengeResMsg_1012 {
+	optional int32 win=1; //0挑战失败 1胜利 2平局
+	optional HistoryData history=2; //排名升降数据
+	optional int32 myRank=3; //我的排名
+	optional int32 count=4; //剩余挑战次数
+	optional int32 buyGold=5; //购买次数所需钻石数
+	optional ArenaAwardData myAward=6; //我的排名奖励
+	optional int32 honor=7; //获得勋章数
+	optional PlayerBaseData playerBaseData=8; //玩家基本数据
+}
+
+//请求晋级资格挑战
+message ArenaJinjiReqMsg_1013 {
+}
+
+//返回晋级资格挑战结果
+message ArenaJinjiResMsg_1014 {
+	optional int32 result=1; //0晋级资格挑战失败 1晋级资格挑战成功 
+	optional bool jinji=2; //是否显示晋级资格
+	optional int32 itemId=3; //礼包id
+}
+
+//竞技场奖励数据
+message ArenaAwardData {
+	optional int32 gold=1; //钻石
+	optional int32 money=2; //金币
+	optional int32 honor=3; //勋章
+}
+
+//竞技场角色数据
+message ArenaRoleData {
+	optional int32 id=1; //玩家数据库id
+	optional string name=2; //玩家名称
+	optional int32 zhiye=3; //职业id
+	optional int32 rank=4; //排名
+	optional int32 stage=5; //段位
+	optional int32 level=6; //等级
+	repeated ArenaArmyData armyList=7; //阵容列表
+	optional string societyName=8; //帮会名
+}
+
+//竞技场阵容数据
+message ArenaArmyData {
+	optional int32 typeId=1; // 兵种类型id
+	optional int32 level=2; // 等级
+	optional int32 stage=3; // 阶级
+	optional int32 quality=4; // 觉醒(品质)
+}
+
+//竞技场日志数据
+message ArenaLogData {
+	optional int32 type=1; //1进攻 2防御
+	optional int32 win=2;  //0挑战失败 1胜利
+	optional int32 up=3; //排名变化（正数排名上升，负数排名下降，0排名不变）
+	optional int32 time=4; //过去的秒数
+	
+	optional int32 myStage=5;  //我的段位
+	optional int32 myZhiye=6; //我的职业id
+	
+	optional string otherName=7; //对手的名称
+	optional int32 otherStage=8; //对手的段位
+	optional int32 otherZhiye=9; //对手的职业id
+	optional int32 otherLevel=10; //对手的等级
+}
+
+//排名升降数据
+message HistoryData {
+	optional int32 myRank=1; // 自己当前排名
+	optional int32 myUp=2; // 自己提升的名次
+	optional int32 myStage=3; //自己当前段位
+	optional string myName=4; //我的名称
+	optional int32 myZhiye=5; //我的职业
+
+	optional int32 enemyRank=6; // 对手当前排名
+	optional int32 enemyDown=7; // 对手下降的名次
+	optional int32 enemyStage=8; // 对手当前段位
+	optional string enemyName=9; //对手的名称
+	optional int32 enemyZhiye=10; //对手的职业
+}

@@ -1,0 +1,171 @@
+option java_package = "xn.protobuf.player";
+option optimize_for = SPEED;
+
+//请求转生
+message PlayerRebornReqMsg_16001 {
+	optional int32 itemId=1; //灵魂石道具id
+	optional int32 count=2; //灵魂石数量
+}
+
+//返回转生
+message PlayerRebornResMsg_16002 {
+	optional int32 reslut=1; //受概率影响  0失败 1成功
+
+	optional PlayerBaseData playerBaseData=2; //玩家基本数据 （失败就不用读了）
+	optional PlayerFightData playerFightData=3; //玩家战斗相关数值（失败就不用读了）
+}
+
+//请求布阵
+message PlayerSetFormationReqMsg_16003 {
+	optional int32 formationType=1; //1默认阵型  2竞技场排位阵型
+	optional string formation=2; //阵型 (兵种id,兵种id,兵种id,兵种id,0,0,0,替补id,替补id) 前面七个位置是出战，后面两个是放替补
+}
+
+//返回布阵
+message PlayerSetFormationResMsg_16004 {
+	optional FormationData formationData=1;
+}
+
+//创建角色
+message PlayerCreateReqMsg_16005 {
+	optional string user=1; //帐号
+	optional string name=2; //角色名
+	optional int32 zhiye=3; //职业id
+}
+
+//返回创建角色接口
+message PlayerCreateResMsg_16006 {
+	optional int32 result=1; //0失败 1成功（成功后调用登录接口）
+}
+
+//请求切换天赋页
+message PlayerSelectTalentPageReqMsg_16007 {
+	optional int32 type=1; //天赋类型id
+}
+
+//返回切换天赋页
+message PlayerSelectTalentPageResMsg_16008 {
+	optional int32 type=1; //天赋类型id
+	optional PlayerBaseData playerBaseData=2;
+	optional PlayerFightData playerFightData=3; //玩家战斗相关数值
+}
+
+//请求设置天赋
+message PlayerSetTalentReqMsg_16009 {
+	optional int32 type=1; //天赋类型id
+	optional string talentList=2; //110001,110002,110005 ,传0重置天赋
+}
+
+//返回设置天赋
+message PlayerSetTalentResMsg_16010 {
+	optional int32 type=1; //天赋类型id
+	optional string talentList=2; //110001,110002,110005
+	optional PlayerFightData playerFightData=3; //玩家战斗相关数值
+}
+
+//阵型数据
+message FormationData {
+	optional int32 formationType=1; //阵型类型 1默认阵型 2竞技场阵型
+	optional string formation=2; //阵型 (兵种id,兵种id,兵种id,兵种id,0,0,0,替补id,替补id) 前面七个位置是出战，后面两个是放替补
+}
+
+//玩家基本数据
+message PlayerBaseData {
+	optional int32 playerId=1; //玩家id（唯一ID）
+	optional string playerName=2; //玩家名称
+	optional int32 level=3; //玩家等级
+	optional int32 exp=4; //经验
+	optional int32 rebornTotalCount=5; //转生总次数
+	optional int32 race=6; //种族
+	optional int32 zhiye=7; //职业
+	optional int32 title=8; //称号
+	optional int32 userMoney=9; //金币
+	optional int32 sysMoney=10; //绑定金币
+	optional int32 userGold=11; //钻石
+	optional int32 sysGold=12; //绑定钻石
+	optional int32 vipLv=13; //vip等级
+	optional int32 subZhiye=14; //职别 0战系 1法系
+	optional int32 talent=15; //天赋总点数
+	optional int32 talentType=16; //正在使用的天赋类型
+	optional int32 honor=17; //勋章
+}
+
+//角色基础属性数据
+message PlayerFightData {
+
+	optional int32 rage=1; // 怒气
+	optional int32 hurt=2; // 伤害
+	optional int32 baoji=3; // 暴击
+	optional int32 wangzhe=4; // 王者
+	optional int32 attack=5; // 攻击
+	optional int32 defend=6; // 防御
+	optional int32 strike=7; // 强袭
+	optional int32 speed=8; // 速度
+	
+	repeated AngerSkillData angerSkillList2=9; //已学会的怒气技能
+	
+	repeated int32 angerSkill=10; //怒气技能（装配技能）
+	
+	optional string runeList=11; //符文id列表 例如 4000001,4000002,0,-1,-1,-1,-1,-1,-1(0是未放置，-1不可放置)
+	repeated TalentData talentData=12; //天赋列表
+}
+
+//怒气技能数据
+message AngerSkillData {
+	optional int32 skillId=1; //技能id 
+	optional int32 active=2; //是否激活 1激活 0未激活
+}
+
+//天赋数据
+message TalentData {
+	optional int32 talentType=1; //天赋类型id
+	optional string talentList=2; //天赋id列表
+}
+
+
+
+
+//请求创建玩家
+message PlayerCreateNewReqMsg_16011{
+
+	optional string user=1;
+}
+
+//返回创建玩家
+message PlayerCreateNewResMsg_16012{
+
+	optional PlayerDataNew playerData=1;
+	
+}
+
+//请求登录
+message PlayerLoginNewReqMsg_16013{
+	
+	optional string user=1;
+}
+
+//返回登录
+message PlayerLoginNewResMsg_16014{
+
+	optional PlayerDataNew playerData=1;
+}
+
+//请求关闭协议
+message PlayerCloseReqMsg_16015{
+
+	optional string msgName=1;
+}
+
+message PlayerCloseResMsg_16016{
+
+	optional string msgName=1;
+}
+
+message PlayerDataNew{
+
+	optional int32 playerId=1;
+	
+	optional string user=2;
+	
+	optional string name=3;
+}

@@ -1,0 +1,118 @@
+option java_package = "xn.protobuf.solider";
+option optimize_for = SPEED;
+
+import "BackageMsg.proto";
+import "PlayerMsg.proto";
+
+//主动下发增加或更新兵种
+
+//请求吃经验
+message SoliderEatExpReqMsg_19001 {
+	optional int32 id=1;  //兵种数据库id
+	optional int32 itemId=2; //配置表道具id
+	optional int32 count=3; //数量
+}
+
+//返回吃经验
+message SoliderEatExpResMsg_19002 {
+	optional SoliderData soliderData=1;
+}
+
+//请求兵种觉醒
+message SoliderAwakenReqMsg_19003 {
+	optional int32 id=1;  //兵种数据库id
+}
+
+//返回觉醒
+message SoliderAwakenResMsg_19004 {
+	optional int32 reslut=1; //0失败 1成功
+	optional SoliderData soliderData=2; //兵种数据
+	optional PlayerBaseData playerBaseData=3; //刷新玩家信息
+}
+
+//请求兵种升阶
+message SoliderStageReqMsg_19005 {
+	optional int32 id=1;  //数据库id
+}
+
+//返回升阶
+message SoliderStageResMsg_19006 {
+	optional SoliderData soliderData=1; //兵种数据
+	optional PlayerBaseData playerBaseData=2; //刷新玩家信息
+}
+
+//请求合成印记
+message SoliderComposeMarkReqMsg_19007 {
+	optional int32 itemId=1; //印记道具id
+	optional int32 count=2; //合成目标印记的数量
+}
+
+//返回合成印记结果
+message SoliderComposeMarkResMsg_19008 {
+	optional PlayerBaseData playerBaseData=1;
+}
+
+//请求摘下印记
+message SoliderTakeOffMarkReqMsg_19009 {
+	optional int32 id=1; //兵种数据库id
+	optional int32 index=2; //index 0地 1水 2火 3风
+}
+
+//返回摘下结果
+message SoliderTakeOffMarkResMsg_19010 {
+	optional SoliderData soliderData=1;
+}
+
+//装备印记
+message SoliderPutMarkReqMsg_19011 {
+	optional int32 id=1; //兵种数据库id
+	optional int32 grid=2; //格子号
+	optional int32 index=3; //index 0地 1水 2火 3风
+}
+
+//返回装备印记结果
+message SoliderPutMarkResMsg_19012 {
+	optional SoliderData soliderData=1;
+}
+
+//一键装备印记
+message SoliderPutAllMarkReqMsg_19015 {
+	optional int32 id=1; //兵种数据库id
+	optional string grid=2; //格子号(1,2,3,4)
+}
+
+//返回装备印记结果
+message SoliderPutAllMarkResMsg_19016 {
+	optional SoliderData soliderData=1;
+}
+
+//主动下发兵种数据（新增或更新）
+message SoliderSendDataResMsg_19018 {
+	optional SoliderData soliderData=1;
+}
+
+//兵种属性数据
+//非中立兵种，不下发普攻技能、天生技能、反击技能；中立兵种全部技能都不下发
+message SoliderData {
+	optional int32 id=1; //数据库id
+	optional int32 soliderId=2; //配置表单位id
+	optional int32 typeId=3; //兵种类型id
+	optional int32 level=4; //等级
+	optional int32 exp=5; //当前经验
+	optional int32 maxExp=6; //最大经验
+	optional int32 quality=7; //觉醒（品质）
+	optional int32 stage=8; //阶级
+	optional int32 race=9; //种族
+	optional int32 hp=10; //生命值
+	optional int32 wuFang=11; //物防
+	optional int32 faFang=12; //法防
+	optional int32 hurt=13; //伤害
+	optional int32 range=14; //射程
+	optional int32 active=15; //主动性
+	optional int32 move=16; //移动
+	optional int32 morale=17; //士气
+	optional int32 baoji=18; //暴击
+	optional string marks=19; //印记道具id(地,水,火,风)
+	
+	repeated int32 skill=20; //技能
+}

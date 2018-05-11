@@ -1,0 +1,88 @@
+option java_package = "xn.protobuf.copy";
+option optimize_for = SPEED;
+
+import "MapMsg.proto";
+import "MonsterMsg.proto";
+import "AwardMsg.proto";
+
+//请求副本信息
+message CopyGetDataReqMsg_3001 {
+	optional int32 copyId=1; //副本Id
+}
+
+//返回副本信息
+message CopyGetDataResMsg_3002 {
+	repeated CopyData copyData=1;
+}
+
+//进入副本
+message CopyEntryReqMsg_3003 {
+	optional int32 copyId=1; //副本id
+	optional int32 diffId=2; //副本难度id
+}
+
+//返回进入副本信息
+message CopyEntryResMsg_3004 {
+	optional MapPlayerData selfMapData=1; //自己的场景信息
+	repeated MapPlayerData otherMapData=2; //场景其它人的基本信息
+	optional int32 time=3; //剩余时间
+}
+
+//请求退出副本
+message CopyExitReqMsg_3005 {
+}
+
+//返回退出副本
+message CopyExitResMsg_3006 {
+	optional MapPlayerData selfMapData=1; //自己的场景信息
+	repeated MapPlayerData otherMapData=2; //场景其它人的基本信息
+}
+
+//请求扫荡副本
+message CopySweepReqMsg_3007 {
+	optional int32 copyId=1;
+	optional int32 diffId=2;
+	optional int32 count=3;
+}
+
+//返回扫荡结果
+message CopySweepResMsg_3008 {
+	repeated CopySweepData sweepData=1; //扫荡数据
+	optional int32 times=2; //剩余挑战次数
+}
+
+//请求开宝箱 
+message CopyOpenBoxReqMsg_3009 {
+	optional int32 index=1; //宝箱索引(0,1,2)
+}
+
+//返回开宝箱结果
+message CopyOpenBoxResMsg_3010 {
+	repeated AwardItemData itemList=1; 
+}
+
+//下发结算结果
+message CopyNotifyResultRes_3012 {
+	optional bool win=1; //是否胜利
+	optional int32 star=2; //星数
+	optional int32 time=3; //用时
+	optional int32 hp=4; //剩余血量
+	repeated AwardItemData dropList=5; //奖励
+}
+
+//扫荡结果数据
+message CopySweepData {
+	repeated AwardItemData dropList=1; //掉落物品
+}
+
+//副本数据
+message CopyData {
+	optional int32 diffId=1; //难度id
+	optional int32 difficulty=2; //难度
+	optional int32 times=3; //剩余挑战次数
+	optional int32 maxTimes=4; //最大挑战次数
+	optional bool canBuy=5; //能否购买次数
+	optional string recordName=6; //最快挑战记录名称
+	optional int32 recordTimes=7; //最快挑战记录时间（秒）
+	optional int32 star=8; //通过星数
+}

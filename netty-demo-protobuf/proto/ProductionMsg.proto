@@ -1,0 +1,118 @@
+option java_package = "xn.protobuf.production";
+option optimize_for = SPEED;
+
+
+//请求生产技能信息
+message ProductionGetInfoReqMsg_16101 {
+	
+}
+
+//返回生产技能信息
+message ProductionGetInfoResMsg_16102 {
+	
+	repeated ProductionData dataList = 1;
+	
+	//熟练度
+	optional int32 degree=2;
+	
+	//等级
+	optional int32 degreeLevel=3;
+}
+
+//生产技能信息
+message ProductionData{
+	
+	//生产技能ID
+	optional int32 productionId=1;
+	
+	//学习类型，1为已学习，0为未学习
+	optional int32 productionType=2;
+	
+}
+
+
+//请求学习生产技能
+message ProductionLearnReqMsg_16103 {
+
+	//生产技能ID
+	optional int32 productionId=1;
+}
+
+//返回学习结果
+message ProductionLearnResMsg_16104 {
+
+	//生产技能ID
+	optional int32 productionId=1;
+	
+	//熟练度
+	optional int32 degree=2;
+	
+	//等级
+	optional int32 degreeLevel=3;
+}
+
+//请求生产材料
+message ProductionProductReqMsg_16105 {
+
+	//配方ID
+	optional int32 formulaId=1;
+}
+
+//返回生产材料结果
+message ProductionProductResMsg_16106 {
+
+	//道具ID
+	optional int32 itemId=1;
+	
+	//数量
+	optional int32 count=2;
+	
+	//熟练度
+	optional int32 degree=3;
+	
+	//等级
+	optional int32 degreeLevel=4;
+}
+
+//请求获取所有配方信息
+message ProductionGetFormulaListReqMsg_16107{
+
+}
+
+//返回所有配方信息
+message ProductionGetFormulaListResMsg_16108{
+
+	repeated FormulaData dataList=1;
+}
+
+//配方数据
+message FormulaData{
+
+	//配方ID
+	optional int32 formulaId=1;
+	
+	//配方类型，1可学习，2未学习，3已学习
+	optional int32 learnType=2;
+}
+
+//请求学习配方
+message ProductionLearnFormulaReqMsg_16109{
+
+	//配方ID
+	optional int32 formulaId=1;
+}
+
+
+//返回学习配方结果
+message ProductionLearnFormulaResMsg_16110{
+
+	//配方ID
+	optional int32 formulaId=1;
+	
+	//熟练度
+	optional int32 degree=2;
+	
+	//等级
+	optional int32 degreeLevel=3;
+}
+

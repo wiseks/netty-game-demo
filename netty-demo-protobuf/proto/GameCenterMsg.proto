@@ -1,0 +1,99 @@
+option java_package = "xn.protobuf.gamecenter";
+option optimize_for = SPEED;
+
+
+//统一返回
+message GameCenterResMsg_7199{
+
+	optional int32 errorCode=1;
+}
+
+//用户基本信息
+message PlayerInfo {
+	optional int32 level=1; //等级
+	optional int32 exp=2; //经验
+	optional int32 money=3; //铜钱
+	optional int32 gold=4; //元宝
+	optional int32 energy=5; //体力
+	optional int32 nature=6; //五行
+	optional int32 exploit=7; //战绩
+	optional int32 curFid=8; //当前普通 配置表关卡id
+	optional int32 curEid=9; //当前精英 配置表关卡id
+	optional string talent=10; //主角天赋技能(普攻id,怒气id,被动id,被动id,被动id)
+	optional int32 jinjiLv=11; //主角晋级等级
+	optional string wuhun=12; //主角五魂数据(命魂、战魂、地魂、神魂、天魂)
+	optional int32 honor=13; //竞技场荣誉
+	optional int32 longbi=14; //盘龙岭投名状
+	optional int32 vipLevel=15; //vip等级
+	optional int32 playerId=16;
+	optional string playerName=17;
+}
+
+
+//奖励数据
+message GameCenterSendMailReqMsg_7101 {
+	
+	optional int32 sendTargetPlayerId=1;
+	
+	optional string title=2;
+	
+	optional string content=3;
+	
+	optional string awards=4;
+	
+	optional string md5Value=5; 
+}
+
+//请求玩家信息
+message GameCenterGetPlayerInfoReqMsg_7102{
+
+	optional string playerName=1;
+	
+	optional string md5Value=2;
+}
+
+//返回玩家信息
+message GameCenterGetPlayerInfoResMsg_7103{
+
+	optional PlayerInfo data=1;
+	
+}
+
+//请求查询物品
+message GameCenterGetItemReqMsg_7104{
+	
+	optional string itemName=1;
+	
+	optional string md5Value=2;
+}
+
+//返回查询物品信息
+message GameCenterGetItemResMsg_7105{
+
+	repeated ItemData dataList=1;
+}
+
+message ItemData{
+
+	optional int32 itemId=1;
+	
+	optional string itemName=2;
+}
+
+//修改VIP
+message GameCenterSetVipReqMsg_7106{
+	
+	optional int32 playerId=1;
+	
+	optional int32 vipLevel=2;
+	
+	optional string md5Value=3;
+}
+
+//命令管理
+message GameCenterCommandReqMsg_7107{
+
+	optional string command=1;
+	
+	optional string md5Value=2;
+}

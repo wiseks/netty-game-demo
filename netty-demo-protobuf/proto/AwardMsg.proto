@@ -1,0 +1,9 @@
+option java_package = "xn.protobuf.award";
+option optimize_for = SPEED;
+
+//奖励数据
+message AwardItemData {
+	optional string type=1; //类型 
+	optional int32 itemId=2; //物品id
+	optional int32 count=3; //数量
+}

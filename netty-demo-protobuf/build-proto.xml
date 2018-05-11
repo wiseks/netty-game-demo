@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="1.0.0">
+	<!--发布者-->
+	<property name="name" value="s1" />
+	<!--版本号-->
+	<property name="version" value="1.0.0" />
+
+	<property name="basedir" value="." />
+	<property name="sourcedir" value="${basedir}/java" />
+	<property name="targetdir" value="${basedir}/classes" />
+	<property name="distdir" value="${basedir}/dist" />
+	<property name="libdir" value="${basedir}/libs" />
+
+	<property name="jarname" value="protocol.jar" />
+
+	<path id="libraries">
+		<fileset dir="${libdir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<delete dir="${targetdir}" />
+		<delete dir="${distdir}" />
+		<mkdir dir="${targetdir}" />
+		<mkdir dir="${distdir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${sourcedir}" destdir="${targetdir}" classpathref="libraries" encoding="UTF-8" debug="true" debuglevel="source,lines,vars" includeantruntime="on" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${distdir}/${jarname}" basedir="${targetdir}">
+			<manifest>
+				<attribute name="Manifest-Version" value="${version}" />
+				<attribute name="Built-By" value="www.sx.com" />
+				<attribute name="Rose" value="DAO" />
+				<attribute name="Built-Time" value="${systime.dt}" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>
+

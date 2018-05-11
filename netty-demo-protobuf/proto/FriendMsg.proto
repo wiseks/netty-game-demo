@@ -1,0 +1,159 @@
+option java_package = "xn.protobuf.friend";
+option optimize_for = SPEED;
+
+import "PlayerMsg.proto";
+import "EquipMsg.proto";
+import "SoliderMsg.proto";
+
+//请求好友列表
+message FriendListReqMsg_6001 {
+	
+}
+
+//返回好友列表
+message FriendListResMsg_6002{
+
+	repeated FriendData dataList=1;
+}
+
+
+//查找好友
+message FriendFindReqMsg_6003{
+
+	optional string name=1;
+}
+
+//返回查找结果
+message FriendFindResMsg_6004{
+
+	repeated FriendData dataList=1;
+}
+
+//申请添加好友请求
+message FriendAddReqMsg_6005{
+
+	//好友ID
+	optional int32 friendPlayerId=1;
+}
+
+//申请添加好友返回
+message FriendAddResMsg_6006{
+	
+}
+
+//同意添加好友请求
+message FriendAgreeReqMsg_6007{
+
+	//好友ID
+	optional int32 friendPlayerId=1;
+	
+	//1表示同意，2表示不同意
+	optional int32 agreeType=2;
+}
+
+//同意添加好友返回
+message FriendAgreeResMsg_6008{
+
+	//好友ID
+	optional FriendData friendData=1;
+	
+	//1表示同意，2表示不同意
+	optional int32 agreeType=2;
+	
+	//拒绝时候返回
+	optional int32 friendPlayerId=3;
+}
+
+//请求删除好友
+message FriendDeleteReqMsg_6009{
+
+	//好友ID
+	optional int32 friendPlayerId=1;
+}
+
+//返回删除好友结果
+message FriendDeleteResMsg_6010{
+
+	//好友ID
+	optional int32 friendPlayerId=1;
+}
+
+
+//请求好友申请列表
+message FriendApplyListReqMsg_6011 {
+	
+}
+
+//返回好友申请列表
+message FriendApplyListResMsg_6012{
+
+	repeated FriendData dataList=1;
+}
+
+//查看人物信息
+message FriendInfoReqMsg_6013 {
+	optional int32 playerId=1; //玩家id
+}
+
+
+//返回人物信息
+message FriendInfoResMsg_6014 {
+	optional string playerName=1; //玩家名称
+	optional string zhiye=2; //职业
+	optional int32 level=3; //玩家等级
+	optional string title=4; //称号
+	optional string societyName=5; //公会名称
+	optional string stage=6; //段位
+	repeated EquipData equipData=7; //装备信息
+	repeated SoliderData soliderData=8; //出战兵种信息
+}
+
+//请求全部同意或拒绝添加好友
+message FriendAllAgreeReqMsg_6015{
+
+	//1表示全部同意，2表示全部拒绝
+	optional int32 agreeType=1;
+}
+
+//返回全部同意或拒绝添加好友
+message FriendAllAgreeResMsg_6016{
+	
+	//1表示全部同意，2表示全部拒绝
+	optional int32 agreeType=1;
+	
+	//同意时候返回好友数据
+	repeated FriendData dataList=2;
+}
+
+//请求附近的人
+message FriendNearReqMsg_6017{
+
+}
+
+//返回附近的人
+message FriendNearResMsg_6018{
+	repeated FriendData dataList=1;
+}
+
+//好友数据
+message FriendData{
+
+	//当前玩家ID
+	optional int32 playerId=1;
+	
+	//好友ID
+	optional int32 friendPlayerId=2;
+	
+	//好友名称
+	optional string friendPlayerName=3;
+	
+	//玩家等级
+	optional int32 level=4;
+	
+	//是否在线，0不在线，1在线
+	optional int32 onlineType=5;
+	
+	//职业ID
+	optional int32 zhiYeId=6;
+
+}

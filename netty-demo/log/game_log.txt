@@ -1,0 +1,58 @@
+[INFO ][2018-05-11 20:06:02] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@53e25b76: startup date [Fri May 11 20:06:02 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:06:02] Loading XML bean definitions from class path resource [game.xml]
+[INFO ][2018-05-11 20:06:02] Loading XML bean definitions from class path resource [application.xml]
+[INFO ][2018-05-11 20:06:02] Loading XML bean definitions from class path resource [application-mybatis.xml]
+[INFO ][2018-05-11 20:06:02] Loading properties file from class path resource [jdbc.properties]
+[INFO ][2018-05-11 20:06:02] START|Init HandlerMethod: SenceHandler --> move --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=false, checkLogin=true, admin=false)
+[INFO ][2018-05-11 20:06:02] START|Init HandlerMethod: SenceHandler --> enterSence --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=false, checkLogin=true, admin=false)
+[INFO ][2018-05-11 20:06:02] START|Init HandlerMethod: PlayerHandler --> createPlayer --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, checkLogin=true, admin=false)
+[INFO ][2018-05-11 20:06:02] START|Init HandlerMethod: PlayerHandler --> getUser --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, checkLogin=true, admin=false)
+[INFO ][2018-05-11 20:06:02] START|Init HandlerMethod: PlayerHandler --> login --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, checkLogin=true, admin=false)
+[INFO ][2018-05-11 20:06:03] START|Init HandlerMethod: PlayerHandler --> closeMsg --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, checkLogin=true, admin=false)
+[INFO ][2018-05-11 20:06:03] START|Init HandlerMethod Count: 6
+[INFO ][2018-05-11 20:06:03] START|LISION PORT:0.0.0.0:6000
+[WARN ][2018-05-11 20:06:03] server start
+[INFO ][2018-05-11 20:08:02] player online size:0
+[INFO ][2018-05-11 20:10:50] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@53e25b76: startup date [Fri May 11 20:10:50 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:10:50] Loading XML bean definitions from class path resource [game.xml]
+[INFO ][2018-05-11 20:10:50] Loading XML bean definitions from class path resource [application.xml]
+[INFO ][2018-05-11 20:10:50] Loading XML bean definitions from class path resource [application-mybatis.xml]
+[INFO ][2018-05-11 20:10:50] Loading properties file from class path resource [jdbc.properties]
+[INFO ][2018-05-11 20:10:51] START|Init HandlerMethod: SenceHandler --> move --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=false, admin=false, checkLogin=true)
+[INFO ][2018-05-11 20:10:51] START|Init HandlerMethod: SenceHandler --> enterSence --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=false, admin=false, checkLogin=true)
+[INFO ][2018-05-11 20:10:51] START|Init HandlerMethod: PlayerHandler --> login --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, admin=false, checkLogin=true)
+[INFO ][2018-05-11 20:10:51] START|Init HandlerMethod: PlayerHandler --> createPlayer --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, admin=false, checkLogin=true)
+[INFO ][2018-05-11 20:10:51] START|Init HandlerMethod: PlayerHandler --> closeMsg --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, admin=false, checkLogin=true)
+[INFO ][2018-05-11 20:10:51] START|Init HandlerMethod: PlayerHandler --> getUser --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, admin=false, checkLogin=true)
+[INFO ][2018-05-11 20:10:51] START|Init HandlerMethod Count: 6
+[INFO ][2018-05-11 20:10:51] START|LISION PORT:0.0.0.0:6000
+[WARN ][2018-05-11 20:10:51] server start
+[INFO ][2018-05-11 20:11:06] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@33a10788: startup date [Fri May 11 20:11:06 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:06] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@10bdf5e5: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@1e127982: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@31dc339b: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@21213b92: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@66480dd7: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@5ec0a365: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@71423665: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@3632be31: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6d7b4f4c: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:11:07] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@370736d9: startup date [Fri May 11 20:11:07 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:11:07] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:12:51] player online size:0
+[INFO ][2018-05-11 20:13:57] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@33a10788: startup date [Fri May 11 20:13:57 CST 2018]; root of context hierarchy
+[INFO ][2018-05-11 20:13:57] Loading XML bean definitions from class path resource [application-test.xml]
+[INFO ][2018-05-11 20:13:57] Loading XML bean definitions from class path resource [application-mybatis.xml]
+[INFO ][2018-05-11 20:13:58] Loading properties file from class path resource [jdbc.properties]
+[INFO ][2018-05-11 20:13:58] START|Init HandlerMethod: PlayerTestHandler --> login --> cmd:@com.rpg.framework.annotation.MessageRequest(nocheck=true, admin=false, checkLogin=true)
+[INFO ][2018-05-11 20:13:58] START|Init HandlerMethod Count: 1

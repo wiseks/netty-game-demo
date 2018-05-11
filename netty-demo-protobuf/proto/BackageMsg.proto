@@ -1,0 +1,180 @@
+option java_package = "xn.protobuf.backage";
+option optimize_for = SPEED;
+
+
+import "PlayerMsg.proto";
+
+//请求初始化背包,服务器测试使用，前端无用
+message BackageInitReqMsg_2001 {
+	
+}
+
+//返回背包数据
+message BackageInitResMsg_2002 {
+
+	repeated BackageData dataList=1;
+}
+
+//请求增加格子
+message BackageAddGridReqMsg_2003{
+	
+	//增加格子类型，1表示背包，2表示仓库
+	optional int32 type=1;
+	
+	//开格子数量
+	optional int32 count=2;
+}
+
+//返回开格子结果
+message BackageAddGridResMsg_2004{
+
+	repeated BackageData dataList=1;
+	
+	//1背包，2仓库
+	optional int32 type=2;
+}
+
+//请求背包信息(返回协议在2010)
+message BackageGetALLReqMsg_2005{
+
+	//类型，1表示背包，2表示仓库
+	optional int32 type=1;
+}
+
+//请求增加物品(测试用，不用调用)
+message BackageAddItemReqMsg_2006{
+	
+	optional int32 itemId=1;
+	
+	optional int32 count=2;
+}
+
+//返回格子改变结果
+message BackageAddItemResMsg_2007{
+
+	repeated BackageData dataList=1;
+	
+	//1有特效，0没有特效
+	optional int32 type=2;
+}
+
+//请求整理背包
+message BackageResetReqMsg_2008{
+
+	//1背包，2仓库
+	optional int32 type=1;
+}
+
+//返回整理结果
+message BackageResetResMsg_2009{
+
+	repeated BackageData dataList=1;
+	
+	//1背包，2仓库
+	optional int32 type=2;
+}
+
+
+//返回背包信息
+message BackageGetALLResMsg_2010{
+
+	repeated BackageData dataList=1;
+	
+	//1背包，2仓库
+	optional int32 type=2;
+}
+
+//请求使用物品
+message BackageUseItemReqMsg_2011{
+	
+	//格子号
+	optional int32 grid=1;
+	
+	//物品ID
+	optional int32 itemId=2;
+	
+	//数量
+	optional int32 count=3;
+}
+
+//使用物品返回
+message BackageUseItemResMsg_2012{
+
+	repeated BackageData dataList=1;
+}
+
+//请求出售物品
+message BackageSellItemReqMsg_2013{
+
+	//格子号
+	optional int32 grid=1;
+	
+	//物品ID
+	optional int32 itemId=2;
+	
+	//数量
+	optional int32 count=3;
+}
+
+//返回出售结果
+message BackageSellItemResMsg_2014{
+
+	optional BackageData data=1;
+	
+	optional PlayerBaseData playerBaseData=2; //玩家基本数据
+}
+
+//请求移动背包物品到仓库
+message BackageMoveToCangKuReqMsg_2015{
+
+	//格子号
+	optional int32 grid=1;
+	
+	//1表示从背包拖动到仓库，2表示从仓库拖动到背包
+	optional int32 type=2;
+}
+
+
+//返回移动背包物品到仓库
+message BackageMoveToCangKuResMsg_2016{
+
+	repeated BackageData dataList=1;
+}
+
+
+//请求丢弃物品
+message BackageRemoveReqMsg_2018{
+
+	//格子号
+	optional int32 grid=1;
+}
+
+//返回丢弃物品结果
+message BackageRemoveResMsg_2019{
+
+	optional BackageData data = 1;
+}
+
+message BackageData {
+	
+	//后端数据库ID
+	optional int32 id=1;
+	
+	//物品ID
+	optional int32 itemId=2;
+	
+	//物品数量
+	optional int32 count=3;
+	
+	//格子号
+	optional int32 grid=4;
+	
+	//装备ID(后端用)
+	optional int32 equipId=5;
+	
+	//装备配置表ID
+	optional int32 equipModelId=6;
+	
+	//1为背包，2为仓库
+	optional int32 type=7;
+}

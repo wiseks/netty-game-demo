@@ -1,0 +1,462 @@
+option java_package = "xn.protobuf.society";
+option optimize_for = SPEED;
+
+import "PlayerMsg.proto";
+
+//请求获取所有公会列表
+message SocietyGetAllReqMsg_19101 {
+	
+}
+
+
+//返回公会列表
+message SocietyGetAllResMsg_19102 {
+	
+	repeated SocietyData dataList=1;
+}
+
+
+//请求创建公会
+message SocietyCreateReqMsg_19103{
+
+	//公会名称
+	optional string name=1;
+}
+
+//返回创建结果
+message SocietyCreateResMsg_19104{
+
+	//1成功，0失败
+	optional int32 createType=1;
+	
+	optional PlayerBaseData playerBaseData=2; //玩家基本数据
+}
+
+//申请加入公会
+message SocietyApplyReqMsg_19105{
+
+	//公会ID
+	optional int32 societyId=1;
+}
+
+//返回申请结果
+message SocietyApplyResMsg_19106{
+
+	//1申请成功，0失败
+	optional int32 applyType=1;
+	
+	optional int32 societyId=2;
+}
+
+//请求帮会申请列表
+message SocietyApplyListReqMsg_19107{
+
+	
+}
+
+//返回帮会申请列表
+message SocietyApplyResMsg_19108{
+
+	repeated  ApplyData dataList=1;
+}
+
+//同意加入帮会
+message SocietyAgreeReqMsg_19109{
+	
+	//申请者ID
+	repeated int32 applyPlayerIds=1;
+	
+	//1为同意，2为拒绝
+	optional int32 agreeType=2;
+}
+
+//返回同意结果
+message SocietyAgreeResMsg_19110{
+
+	repeated BangHuiChengYuanData data=1;
+	
+	//1为同意，2为拒绝
+	optional int32 agreeType=2;
+}
+
+//请求退出帮会
+message SocietyExitReqMsg_19111{
+
+	
+}
+
+//返回退出帮会结果
+message SocietyExitResMsg_19112{
+
+	//退出结果，1成功
+	optional int32 result=1;
+}
+
+
+//请求捐献
+message SocietyDonateReqMsg_19113{
+	
+	//捐献值
+	optional int32 money=1;
+}
+
+//返回捐献结果
+message SocietyDonateResMsg_19114{
+
+	//玩家总贡献值
+	optional int32 playerValue=1;
+	
+	//帮会总贡献值
+	optional int32 allValue=2;
+	
+	//捐献后帮会排名
+	optional int32 rank=3;
+	
+	//公会等级
+	optional int32 level=4;
+	
+	//公会ID
+	optional int32 societyId=5;
+	
+	//声望
+	optional int32 shengWang=6;
+	
+	//新的捐献点数
+	optional int32 donateExp=7;
+	
+	//当天捐献铜币
+	optional int32 todayDonateMoney=8;
+	
+	optional PlayerBaseData playerBaseData=9; //玩家基本数据
+}
+
+//请求帮会任命
+message SocietyRenMingReqMsg_19115{
+
+	//被任命的玩家ID
+	optional int32 renMingPlayerId=1;
+	
+	//成员职位(1,"会长"),(2,"副会长"),(3,"官员"),(4,"成员")
+	optional int32 type=2;
+}
+
+//返回帮会任命结果
+message SocietyRenMingResMsg_19116{
+
+	//被任命玩家 ID
+	optional int32 targetPlayerId=1;
+	
+	//被任命玩家职位(1,"会长"),(2,"副会长"),(3,"官员"),(4,"成员")
+	optional int32 targetPlayerZhiWeiType=2;
+	
+	//任命结果，1成功
+	optional int32 result=3;
+}
+
+
+//请求将玩家T出帮会
+message SocietyDeletePlayerReqMsg_19117{
+
+	//被T玩家ID
+	optional int32 deletePlayerId=1;
+}
+
+//返回T出结果
+message SocietyDeletePlayerResMsg_19118{
+
+	//被T玩家ID
+	optional int32 deletePlayerId=1;
+	
+	//T出结果，1成功
+	optional int32 result=2;
+}
+
+
+//请求学习帮会技能
+message SocietySkillLearnReqMsg_19119{
+
+	//技能ID
+	optional int32 skillId=1;
+}
+
+//返回学习技能结果
+message SocietySkillLearnResMsg_19120{
+
+	//学习后的技能ID
+	optional int32 skillId=1;
+	
+	//学习后的技能等级
+	optional int32 skillLevel=2;
+	
+	//1成功
+	optional int32 result=3;
+	
+	//学习技能后剩余的捐献点数
+	optional int32 donateExp=4;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=5;
+}
+
+//请求领取福利
+message SocietyReceiveReqMsg_19121{
+
+	optional int32 awardId=1;
+}
+
+//返回领取福利结果
+message SocietyReceiveResMsg_19122{
+
+	//领取结果，1成功
+	optional int32 receiveType=1;
+	
+	//福利ID
+	optional int32 awardId=2;
+	
+	//领取后的贡献点数
+	optional int32 societyDonateExp=3;
+	
+	
+}
+
+//请求编辑公告
+message SocietyEditGongGaoReqMsg_19123{
+
+	//公告内容
+	optional string gongGao=1;
+}
+
+//返回编辑公告结果
+message SocietyEditGongGaoResMsg_19124{
+
+	//1成功
+	optional int32 result=1;
+}
+
+
+//请求帮会信息
+message SocietyInfoReqMsg_19125{
+
+}
+
+//返回帮会信息
+message SocietyInfoResMsg_19126{
+
+	//0表示玩家没有帮会（其他字段就没有作用）,1表示玩家已加入或创建帮会
+	optional int32 type=1;
+
+	//帮会信息
+	optional SocietyData bangHuiData=2;
+
+	//帮会成员信息
+	repeated BangHuiChengYuanData dataList=3;
+	
+	//是否有人申请加入帮会，1表示有申请，0表示没有
+	optional int32 applyType=4;
+	
+	//声望
+	optional int32 shengWang=5;
+	
+	//申请列表
+	repeated ApplyData applyDataList=6;
+	
+	//福利
+	repeated SocietyAwardData awardDataList=7;
+}
+
+//请求公会日志
+message SocietyLogReqMsg_19127{
+	
+}
+	
+//返回公会日志结果
+message SocietyLogResMsg_19128{
+	
+	repeated LogData dataList=1;
+}
+
+//同意后推送信息给被同意玩家
+message SocietyAgreeBasicInfoResMsg_19129{
+
+	optional int32 societyId=1;//公会ID
+	optional string societyName=2;//公会名称
+	optional int32 societyDonateExp=3;//公会捐献点数
+	
+}
+
+//请求邀请玩家加入帮会
+message SocietyInviteReqMsg_19130{
+
+	//被邀请玩家ID
+	optional int32 beInvitePlayerId=1;
+}
+
+//返回邀请结果
+message SocietyInviteResMsg_19131{
+
+	//1成功，0失败
+	optional int32 result=1;
+}
+
+//被邀请玩家收到的消息
+message SocietyBeInviteResMsg_19132{
+
+	//邀请者ID
+	optional int32 invitePlayerId=1;
+	
+	//邀请者名字
+	optional string invitePlayerName=2;
+	
+	//邀请者帮会ID
+	optional int32 inviteSocietyId=3;
+	
+	//邀请者帮会名称
+	optional string inviteSocietyName=4;
+}
+
+//确认邀请
+message SocietyAgreeInviteReqMsg_19133{
+
+	//邀请者ID
+	optional int32 invitePlayerId=1;
+}
+
+//确认邀请返回
+message SocietyAgreeInviteResMsg_19134{
+	
+	//1成功，0失败
+	optional int32 result=1;
+}
+
+
+message LogData{
+	
+	//日期
+	optional string date=1;
+	
+	//(1,"加入帮会"),(2,"离开帮会"),(3,"捐献"),(4,"任命"),
+	optional int32 logType=2;
+	
+	//玩家名称
+	optional string playerName=3;
+	
+	//描述
+	optional string desc=4;
+}
+
+//公会信息
+message SocietyData{
+
+	//公会ID
+	optional int32 societyId=1;
+	
+	//公会编号
+	optional int32 serialNo=2;
+	
+	
+	//公会名称
+	optional string name=3;
+	
+	//公会等级
+	optional int32 level=4;
+	
+	//公会成员数量
+	optional int32 manCount=5;
+	
+	//公会排名
+	optional int32 rank=6;
+	
+	//公会公告
+	optional string notice=7;
+	
+	//帮主名字
+	optional string leaderName=8;
+	
+	//申请类型，0未申请，1已申请，2已加入
+	optional int32 applyType=9;
+	
+	//声望
+	optional int32 shengWang=10;
+	
+	//会长职业ID
+	optional int32 leaderZhiYeId=11;
+}
+
+//申请者信息
+message ApplyData{
+
+	optional int32 playerId=1;
+
+	//名字	
+	optional string playerName=2;
+	
+	//等级
+	optional int32 level=3;
+	
+	//申请时间yyyy/MM/dd
+	optional string applyDate=5; 
+	
+	//头像
+	optional int32 zhiYeId=6;
+
+}
+
+//帮会成员信息
+message BangHuiChengYuanData{
+	
+	//成员ID
+	optional int32 playerId=1;
+	
+	//成员名称
+	optional string playerName=2;
+	
+	//成员捐献值
+	optional int32 donateValue=3;
+	
+	//成员职位(1,"会长"),(2,"副会长"),(3,"官员"),(4,"成员")
+	optional int32 zhiWeiType=4;
+	
+	//最后登录时间yyyy/MM/dd
+	optional string lastLoginTime=5;
+	
+	//玩家等级
+	optional int32 playerlevel=6;
+	
+	//技能信息
+	repeated SkillData skillDataList=7;
+	
+	//0表示不在线，1表示在线
+	optional int32 onlineType=8;
+	
+	//职业ID
+	optional int32 zhiYeId=9;
+	
+	//当天捐献铜币
+	optional int32 todayDonateMoney=10;
+	
+	//捐献点
+	optional int32 donateExp=11;
+	
+	// 在线类型，当onlineType=0时，1=今天，2=1天前，3=3天前，4=不在线
+	optional int32 loginType=12;
+	
+}
+
+message SkillData {
+
+	//技能ID
+	optional int32 skillId=1;
+	
+	//技能等级
+	optional int32 skillLevel=2;
+}
+
+message SocietyAwardData{
+	
+	//福利ID
+	optional int32 awardId=1;
+	
+	//领取类型，0不可领取，1可领取，2已领取
+	optional int32 receiveType=2;
+}
+

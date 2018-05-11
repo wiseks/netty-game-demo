@@ -1,0 +1,358 @@
+option java_package = "xn.protobuf.equip";
+option optimize_for = SPEED;
+
+import "AwardMsg.proto";
+import "BackageMsg.proto";
+import "PlayerMsg.proto";
+
+//请求穿戴装备
+message EquipWearReqMsg_5001 {
+	
+	//装备ID
+	optional int32 equipId=1;
+}
+
+//返回穿戴结果
+message EquipWearResMsg_5002{
+
+	//0失败，1成功
+	optional int32 result=1;
+	
+	//装备ID
+	optional int32 equipId=2;
+	
+	//背包信息
+	optional BackageData backageData=3;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=4;
+	
+}
+
+//请求脱卸装备
+message EquipDisWearReqMsg_5003{
+	
+	optional int32 equipId=1;
+}
+
+//返回脱卸结果
+message EquipDisWearResMsg_5004{
+
+	//0失败，1成功
+	optional int32 result=1;
+	
+	//装备ID
+	optional int32 equipId=2;
+	
+	//背包信息
+	optional BackageData backageData=3;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=4;
+}
+
+//请求强化装备
+message EquipUpdateReqMsg_5005{
+
+	optional int32 equipId=1;
+}
+
+//请求强化10次装备
+message EquipUpdateTenReqMsg_5006{
+
+	optional int32 equipId=1;
+}
+
+//返回强化结果
+message EquipUpdateResMsg_5007{
+
+	optional int32 newLevel=1;
+	
+	optional EquipData data = 2;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=3;
+	
+	optional PlayerBaseData playerBaseData=4; //玩家基本数据
+}
+
+//请求镶嵌装备
+message EquipInsetReqMsg_5008{
+
+	//镶嵌部位 1武器 2副手 3头盔 4盔甲 5披风 6靴子 7项链 8指环
+	optional int32 equipPosition=1;
+	
+	//宝石ID
+	optional int32 itemId=2;
+	
+	//镶嵌的位置
+	optional int32 gemPosition=3;
+}
+
+//返回镶嵌结果
+message EquipInsetResMsg_5009{
+
+	optional PositionData data=1;
+	
+	repeated GemData gemData=2;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=3;
+}
+
+
+//请求拆卸镶嵌的宝石
+message EquipDisInsetReqMsg_5010{
+
+	//部位
+	optional int32 equipPosition=1;
+	
+	optional int32 gemPosition=2;
+}
+
+//返回拆卸结果
+message EquipDisInsetResMsg_5011{
+
+	optional PositionData data=1;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=2;
+}
+
+
+//请求附魔
+message EquipClingReqMsg_5012{
+
+	optional int32 equipId=1;
+	
+	//附魔材料ID
+	optional int32 itemId=2;
+}
+
+//返回附魔结果
+message EquipClingResMsg_5013{
+
+	optional EquipData data=1;
+	
+	//附魔材料
+	optional FuMuData fuMuData=2;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=3;
+}
+
+
+//请求分解装备
+message EquipResolveReqMsg_5014{
+
+	repeated int32 equipIdList=1;
+}
+
+//返回分解结果
+message EquipResolveResMsg_5015{
+
+	repeated AwardItemData dataList=1;
+	
+	//分解的装备信息
+	repeated EquipData data=2;
+}
+
+
+//请求合成宝石
+message EquipGemMergeReqMsg_5016{
+
+	//宝石ID
+	optional int32 itemId=1;
+	
+	//宝石数量
+	optional int32 count=2;
+	
+	//0表示没选中保底符，1表示选中保底符
+	optional int32 baoDiType=3;
+}
+
+//返回合成宝石结果
+message EquipGemMergeResMsg_5017{
+
+	repeated GemData data=1;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=2;
+	
+	optional PlayerBaseData playerBaseData=3; //玩家基本数据
+}
+
+
+//请求获取玩家身上的装备信息
+message EquipGetAllReqMsg_5018{
+
+}
+
+//返回玩家身上的装备信息
+message EquipGetAllResMsg_5019{
+	
+	repeated EquipData dataList = 1;
+}
+
+
+//请求身上所有未镶嵌的宝石
+message EquipGetAllGemReqMsg_5020{
+
+}
+
+
+//返回身上所有未镶嵌的宝石
+message EquipGetAllGemResMsg_5021{
+
+	repeated GemData dataList=1;
+}
+
+//获取玩家所有的附魔材料
+message EquipGetFuMoItemReqMsg_5022{
+
+}
+
+//返回附魔材料
+message EquipGetFuMoItemResMsg_5023{
+
+	repeated FuMuData dataList=1;
+}
+
+//请求可以分解的装备信息
+message EquipResoveDataReqMsg_5024{
+
+}
+
+//返回可以分解的装备信息
+message EquipResoveDataResMsg_5025{
+
+	repeated EquipData dataList=1;
+}
+
+
+//装备改变下发
+message EquipChangeResMsg_5026 {
+	
+	//装备ID
+	optional EquipData data=1;
+	
+	//1增加装备，2改变装备，3移除装备
+	optional int32 changType=2;
+}
+
+//请求一键镶嵌装备
+message EquipOneKeyInsetReqMsg_5027{
+
+	//镶嵌部位 1武器 2副手 3头盔 4盔甲 5披风 6靴子 7项链 8指环
+	optional int32 equipPosition=1;
+	
+	//宝石id,格式10086, 10087, 10088, 10089
+	optional string params=2;
+}
+
+
+//返回一键镶嵌结果
+message EquipOneKeyInsetResMsg_5028{
+
+	repeated PositionData data=1;
+	
+	repeated GemData gemData=2;
+	
+	//玩家战斗相关数值（失败就不用读了）
+	optional PlayerFightData playerFightData=3;
+}
+
+
+//请求合成道具
+message EquipMergeReqMsg_5029{
+
+	//道具ID
+	optional int32 itemId=1;
+	
+	optional int32 count=2;
+}
+
+//返回合成道具结果
+message EquipMergeResMsg_5030{
+
+	//新合成的道具ID
+	optional int32 itemId=1;
+	
+	optional int32 count=2;
+	
+	optional PlayerBaseData playerBaseData=3; //玩家基本数据
+}
+
+
+
+
+//附魔材料
+message FuMuData{
+
+	optional int32 fuMoModelId=1;
+	
+	optional int32 count=2;
+
+}
+
+
+//宝石数据
+message GemData{
+
+	optional int32 gemModelId=1;
+	
+	optional int32 count=2;
+	
+	//1表示已经镶嵌的宝石，2表示未镶嵌的宝石
+	optional int32 wearType=3;
+}
+
+
+//装备数据
+message EquipData{
+
+	//装备ID
+	optional int32 equipId=1;
+	
+	//装备配置表ID
+	optional int32 equipModelId=2;
+	
+	//部位
+	optional int32 position=3;
+	
+	//强化等级
+	optional int32 updateLevel=4;
+	
+	//附魔ID
+	optional int32 clingId=5;
+	
+	//穿戴类型，0不穿戴，1穿戴
+	optional int32 wearType=6;
+	
+	//背包类型，0表示穿戴在身上，1在背包，2在仓库
+	optional int32 backageType=7;
+}
+
+
+//部位数据
+message PositionData{
+
+	//装备信息
+	optional EquipData data=1;
+	
+	//部位
+	optional int32 equipPosition=2;
+	
+	//镶嵌位置1宝石ID
+	optional int32 gemPosition1=3;
+	
+	//镶嵌位置2宝石ID
+	optional int32 gemPosition2=4;
+	
+	//镶嵌位置3宝石ID
+	optional int32 gemPosition3=5;
+	
+	//镶嵌位置1宝石ID
+	optional int32 gemPosition4=6;
+}
+

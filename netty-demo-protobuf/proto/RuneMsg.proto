@@ -1,0 +1,27 @@
+option java_package = "xn.protobuf.rune";
+option optimize_for = SPEED;
+
+import "PlayerMsg.proto";
+
+//请求合成符文
+message RuneComposeReqMsg_18001 {
+	optional int32 itemId=1; //符文道具id
+	optional int32 count=2; //合成目标符文的数量
+}
+
+//返回合成符文结果
+message RuneComposeResMsg_18002 {
+	optional PlayerBaseData playerBaseData=1;
+}
+
+//请求设置符文
+message RuneSetReqMsg_18003 {
+	optional string runes=1; //例如 4000001,4000002,0,-1,-1,-1,-1,-1,-1(0是未放置，-1不可放置)
+}
+
+//返回设置符文结果
+message RuneSetResMsg_18004 {
+	optional PlayerFightData playerFightData=1; //玩家战斗相关数值
+	optional string runeList=2; //符文id列表 例如 4000001,4000002,0,-1,-1,-1,-1,-1,-1(0是未放置，-1不可放置)
+}
+

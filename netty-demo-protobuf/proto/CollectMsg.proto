@@ -1,0 +1,45 @@
+option java_package = "xn.protobuf.collect";
+option optimize_for = SPEED;
+
+//获取场景的所有采集物件
+message CollectItemGetAllReqMsg_3101 {
+}
+
+//返回场景的所有采集物件
+message CollectItemGetAllResMsg_3102 {
+	repeated CollectItemData CollectItemList=1; //采集物件列表
+}
+
+//主动下发生成采集物件
+message CollectItemCreateResMsg_3104 {
+	optional CollectItemData collectItem=1; //采集物件
+}
+
+//主动下发更新采集物件状态
+message CollectItemStateResMsg_3106 {
+	optional int32 id=1; //采集物件唯一id
+	optional int32 state=2; //1空闲 2消失
+	optional int32 mapId=3; //所在场景id
+}
+
+//请求采集物件
+message CollectItemGainReqMsg_3107 {
+	optional int32 id=1; //采集物件唯一id
+}
+
+//返回采集物件
+message CollectItemGainResMsg_3108 {
+	optional int32 collectId=1; //采集物件配置表id
+	optional int32 count=2; //数量
+}
+
+//采集物件信息
+message CollectItemData {
+	optional int32 id=1; //采集物件唯一id
+	optional int32 collectId=2; //采集物件配置表id
+	optional int32 mapId=3; //所在场景id
+	optional int32 state=4; //1空闲 2消失
+	optional float x=5; //出生x坐标
+	optional float y=6; //出生y坐标
+	optional float z=7; //出生z坐标
+}

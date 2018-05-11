@@ -1,0 +1,16 @@
+option java_package = "xn.protobuf.npc";
+option optimize_for = SPEED;
+
+import "TaskMsg.proto";
+
+//请求和NPC对话
+message NpcTalkReqMsg_14001 {
+	optional int32 npcId=1;
+	optional int32 taskId=2; //任务id
+}
+
+//返回结果
+message NpcTaklResMsg_14002 {
+	optional int32 result=1; //0不更新 1更新
+	optional UpdateTaskData updateTaskData=2; //更新任务数据
+}

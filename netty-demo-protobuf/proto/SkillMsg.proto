@@ -1,0 +1,37 @@
+option java_package = "xn.protobuf.solider";
+option optimize_for = SPEED;
+
+import "SoliderMsg.proto";
+import "PlayerMsg.proto";
+
+//请求升级技能
+message SkillUpgradeReqMsg_19051 {
+	optional int32 skillId=1; //技能配置表id
+	optional int32 soliderId=2; //兵种数据库id（传0表示升级的是主角技能）
+}
+
+//返回升级结果
+message SkillUpgradeResMsg_19052 {
+	optional PlayerBaseData playerBaseData=1; //玩家基本数据
+	optional int32 type=2; //0兵种 1主角
+	optional PlayerFightData playerFightData=3; //type==0，刷新玩家战斗相关数值
+	optional SoliderData soliderData=4; //type==1，刷新兵种数据
+	optional int32 skillId=5; //升级前id
+	optional int32 nextSkillId=6; //升级后技能id
+}
+
+//请求选择技能
+message SkillSelectReqMsg_19053 {
+	optional int32 skillId=1; //技能id （传0 卸下主动技能，-1卸下怒气技能）
+	optional int32 index=2; //位置 1、2、3
+	optional int32 soliderId=3; //兵种数据库id（传0表示是主角技能）
+}
+
+//返回选择结果
+message SkillSelectResMsg_19054 {
+	optional int32 type=1; //0兵种 1主角
+	optional PlayerFightData playerFightData=2; //type==0，刷新玩家战斗相关数值
+	optional SoliderData soliderData=3; //type==1，刷新兵种数据
+	optional int32 index=4; //位置
+}
+

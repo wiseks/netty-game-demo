@@ -1,0 +1,37 @@
+option java_package = "xn.protobuf.login";
+option optimize_for = SPEED;
+
+import "PlayerMsg.proto";
+import "SoliderMsg.proto";
+import "MapMsg.proto";
+import "EquipMsg.proto";
+import "BackageMsg.proto";
+import "TaskMsg.proto";
+
+//请求登录
+message LoginReqMsg_12001 {
+	optional string user=1; //用户名
+	optional string code=2; //平台验证码（测试随便填个值传）
+}
+
+//登录返回数据
+message LoginResMsg_12002 {
+	optional int32 result=1; //0没有角色，需要创建 1登录成功
+
+	optional PlayerBaseData playerBaseData=2; //玩家基本数据
+	optional PlayerFightData playerFightData=3; //玩家战斗相关数值
+	repeated SoliderData soliderList=4; //兵种列表
+	optional MapPlayerData selfMapData=5; //自己的场景信息
+	repeated MapPlayerData otherMapData=6; //场景其它人的基本信息
+	repeated EquipData equipData=7;//装备信息
+	repeated BackageData backageData=8;//背包信息
+	repeated TaskData taskData=9; //已接任务列表
+	
+	repeated PositionData positionData=10; //部位数据
+	optional int32 societyId=11;//公会ID
+	optional string societyName=12;//公会名称
+	optional int32 societyDonateExp=13;//公会捐献点数
+	optional string reconnectCopyInfo=14; //副本id,副本难度（10001,100001）
+	
+	repeated FormationData formationList=15; //布阵数据
+}

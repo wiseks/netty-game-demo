@@ -1,0 +1,13 @@
+option java_package = "xn.protobuf.test";
+option optimize_for = SPEED;
+
+import "PlayerMsg.proto";
+
+//请求获取可接任务列表
+message TestReqMsg_21001 {
+}
+
+//返回可接任务列表
+message TestResMsg_21002 {
+	
+}

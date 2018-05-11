@@ -1,0 +1,38 @@
+option java_package = "xn.protobuf.chat";
+option optimize_for = SPEED;
+
+//请求发送聊天信息
+message ChatSendReqMsg_3201 {
+	optional int32 type=1; //聊天类型 1文本 2语音
+	optional int32 channel=2; //聊天频道  1世界 2公会 3团队 4私聊 5系统
+	optional int32 receiverId=3 [default=0]; //接受者玩家id 0表示没有
+	optional string content=4; //文字内容
+	optional string receiverName=5 [default=""]; //接收者名字
+	optional bytes voice=6 [default=""]; //语音流
+}
+
+//返回发送聊天信息结果
+message ChatSendResMsg_3202 {
+	optional int32 succ=1; //返回发送结果 1成功 -1您说话太快了，休息下吧
+}
+
+//下发聊天信息
+message ChatInfoResMsg_3204 {
+	optional int32 type=1; //聊天类型 1文本 2语音
+	optional int32 channel=2; //聊天频道 1世界 2公会 3团队 4私聊 5系统
+	
+	optional int32 sendId=3; //发送者id
+	optional string sendName=4; //发送者名字
+	optional int32 sendLevel=5; //发送者等级
+	optional int32 sendZhiye=6; //发送者职业id
+	
+	optional string content=7; //文字内容
+	optional bytes voice=8; //语音流
+	
+	optional int32 receiverIdId=9; //接收者id
+	optional string receiverName=10; //接收者名字
+	optional int32 receiverLevel=11; //接收者等级
+	optional int32 receiverZhiye=12; //接收者职业id
+	
+	optional int32 time=13; //发送时间（时间戳）
+}
