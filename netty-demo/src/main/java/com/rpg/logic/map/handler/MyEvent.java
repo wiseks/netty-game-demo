@@ -1,5 +1,10 @@
 package com.rpg.logic.map.handler;
 
+/**
+ * 
+ * @author wudeji
+ *
+ */
 public class MyEvent{
 	private int x;
 	
