@@ -13,13 +13,13 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import com.rpg.framework.code.ProtobufDecoder;
 import com.rpg.framework.code.ProtobufEncoder;
 import com.rpg.framework.handler.ServerHandler;
-import com.rpg.framework.protobuf.ProtobufMapping;
+import com.rpg.framework.handler.ServerHandlerDispatcher;
 
 public abstract class AbstractServer {
 	
 	private final Logger log = Logger.getLogger(this.getClass());
 
-	protected void bind(final InetSocketAddress address,final ProtobufMapping protobufMapping,final ServerHandler gameServerHandler) {
+	protected void bind(final InetSocketAddress address,final ServerHandlerDispatcher dispatcher,final ServerHandler<?> gameServerHandler) {
 		ServerBootstrap bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(
 				Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 
@@ -33,7 +33,7 @@ public abstract class AbstractServer {
 				// pipeline.addLast("decoder", new MyDecoder());
 				// pipeline.addLast("encoder", new MyEncoder());
 
-				pipeline.addLast("decoder", new ProtobufDecoder(protobufMapping));
+				pipeline.addLast("decoder", new ProtobufDecoder(dispatcher));
 				pipeline.addLast("encoder", new ProtobufEncoder());
 
 				pipeline.addLast("handler", gameServerHandler);

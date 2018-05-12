@@ -22,7 +22,7 @@ import com.google.protobuf.Message;
 import com.rpg.framework.code.ProtobufDecoder;
 import com.rpg.framework.code.ProtobufEncoder;
 import com.rpg.framework.code.Response;
-import com.rpg.framework.protobuf.ProtobufMapping;
+import com.rpg.framework.handler.ServerHandlerDispatcher;
 import com.rpg.logic.server.ServerStart;
 
 public abstract class TestGame extends TestCase {
@@ -53,7 +53,7 @@ public abstract class TestGame extends TestCase {
 		properties.load(new InputStreamReader(ServerStart.class.getResourceAsStream("/game_resources/system.properties"), "UTF-8"));
 		System.setProperty("log4jdir", properties.getProperty("log4jdir"));
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application-test.xml");
-		protobufMapping = context.getBean(ProtobufMapping.class);
+		ServerHandlerDispatcher dispatcher = context.getBean(ServerHandlerDispatcher.class);
 //		protobufMapping = new ProtobufMapping();
 		//protobufMapping.initialize();
 		//protobufMapping.init();
@@ -61,7 +61,7 @@ public abstract class TestGame extends TestCase {
 
 			public ChannelPipeline getPipeline() throws Exception {
 				ChannelPipeline pipeline = Channels.pipeline();
-				pipeline.addLast("encoder", new ProtobufDecoder(protobufMapping));
+				pipeline.addLast("encoder", new ProtobufDecoder(dispatcher));
 				pipeline.addLast("decoder", new ProtobufEncoder());
 				pipeline.addLast("handler", new ClientHandler());
 				return pipeline;

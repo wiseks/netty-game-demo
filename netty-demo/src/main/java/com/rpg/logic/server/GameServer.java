@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.rpg.framework.config.ServerConfig;
 import com.rpg.framework.handler.ServerHandler;
-import com.rpg.framework.protobuf.ProtobufMapping;
+import com.rpg.framework.handler.ServerHandlerDispatcher;
 import com.rpg.framework.server.AbstractServer;
 
 
@@ -33,14 +33,14 @@ public class GameServer extends AbstractServer {
 	// private CloseService closeService;
 
 	@Autowired
-	private ProtobufMapping protobufMapping;
+	private ServerHandlerDispatcher dispatcher;
 
 	@SuppressWarnings("restriction")
 	@PostConstruct
 	public void init() {
 		Set<InetSocketAddress> addressSet = serverConfig.getInetSocketAddressSet();
 		for (InetSocketAddress address : addressSet) {
-			this.bind(address,protobufMapping,gameServerHandler);
+			this.bind(address,dispatcher,gameServerHandler);
 		}
 
 	}

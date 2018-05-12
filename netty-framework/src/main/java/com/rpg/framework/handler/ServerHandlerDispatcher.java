@@ -1,4 +1,4 @@
-package com.rpg.framework.dispatch;
+package com.rpg.framework.handler;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ import com.rpg.framework.session.UserSession;
  * 命令分发器
  */
 @Service
-public class CommandDispatcher{
+public class ServerHandlerDispatcher{
 
 	private final Log log = LogFactory.getLog(this.getClass());
 	
@@ -63,7 +63,7 @@ public class CommandDispatcher{
 		return true;
 	}
 
-	public void dispatch(Request cmd, ChannelHandlerContext context) {
+	void dispatch(Request cmd, ChannelHandlerContext context) {
 		if (cmd == null)
 			return;
 
@@ -146,7 +146,7 @@ public class CommandDispatcher{
 	}
 
 	@PostConstruct
-	public void init() {
+	private void init() {
 		// 从sping上下文取出所有消息处理器
 		Map<String, Object> handlerMap = applicationContext.getBeansWithAnnotation(MessageController.class);
 
@@ -187,6 +187,9 @@ public class CommandDispatcher{
 									CommandHandlerHolder holder = new CommandHandlerHolder(obj, method, paramSize, cmd);
 									handlers.put(clazz1, holder);
 									handlerCloses.put(clazz1.getSimpleName(), false);
+									
+									log.info(("START|Init HandlerMethod: " + clazz.getSimpleName() + " --> " + method.getName()
+									+ " --> cmd:" + className));
 								}
 							} catch (ClassNotFoundException e) {
 								e.printStackTrace();
@@ -199,21 +202,15 @@ public class CommandDispatcher{
 				}
 				// 把处理方法加入缓存中
 //				Class<?> mappingClass = getMappingForMethod(method, userType);
-				
-				log.info(("START|Init HandlerMethod: " + clazz.getSimpleName() + " --> " + method.getName()
-						+ " --> cmd:" + cmd.toString()));
 			}
 		}
 		log.info("START|Init HandlerMethod Count: " + handlers.size());
 	}
-
-//	protected Class<?> getMappingForMethod(Method method, Class<?> clazz) {
-//		MessageMapping methodAnnotation = AnnotationUtils.findAnnotation(method, MessageMapping.class);
-//		if (methodAnnotation != null) {
-//			return methodAnnotation.value();
-//		}
-//		return null;
-//	}
+	
+	
+	public Message message(short cmd) {
+		return cmd2Message.get(cmd);
+	}
 
 	/**
 	 * 消息处理方法容器

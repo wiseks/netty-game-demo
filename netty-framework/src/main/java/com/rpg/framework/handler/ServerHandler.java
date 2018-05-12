@@ -20,7 +20,6 @@ import com.rpg.framework.annotation.EventMethod;
 import com.rpg.framework.code.Request;
 import com.rpg.framework.config.CoreThreadFactory;
 import com.rpg.framework.config.ServerConfig;
-import com.rpg.framework.dispatch.CommandDispatcher;
 import com.rpg.framework.server.ServerStopEvent;
 import com.rpg.framework.session.SessionHolder;
 
@@ -35,7 +34,7 @@ public class ServerHandler<K> extends SimpleChannelHandler {
 	private final Log log = LogFactory.getLog(this.getClass());
 
 	@Autowired
-	private CommandDispatcher dispatcher;
+	private ServerHandlerDispatcher dispatcher;
 
 	@Autowired
 	private ServerConfig serverConfig;

@@ -1,4 +1,4 @@
-package com.rpg.framework.protobuf;
+package com.rpg.framework.test;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -32,35 +32,13 @@ public class ProtobufMapping{
 
 	private static final char CMD_SEPARATOR = '_';
 
-	//private static final String resourcePattern = "**/*Msg" + CMD_SEPARATOR + "*.class";
-
-	//private static final String DEFAULT_INSTANCE_METHOD = "getDefaultInstance";
 
 	private static final Map<Short, Message> cmd2Message = new HashMap<Short, Message>();
 
 	private static final Map<Class<?>, Short> messageClass2Cmd = new HashMap<Class<?>, Short>();
 
-	//private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-
-	//private MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
-
-	//@Value("xn/protobuf")
-	//private String basePackage = DEFATULT_PROTOBUF_PACKAGE;
-
-//	public ProtobufMapping() {
-//	}
-
-//	public ProtobufMapping(String basePackage) {
-//		this.basePackage = basePackage;
-//	}
-
-	@PostConstruct
-	private void initialize() {
-		//basePackage = ClassUtils.convertClassNameToResourcePath(basePackage);
-//		initProtobufClasses();
-		init();
-	}
 	
+	@PostConstruct
 	private void init() {
 		
 		if (!cmd2Message.isEmpty()) {
@@ -117,53 +95,6 @@ public class ProtobufMapping{
 		}
 	}
 
-//	public void initProtobufClasses() {
-//		if (!cmd2Message.isEmpty()) {
-//			return;
-//		}
-//		String[] basePackages = basePackage.split(",");
-//		for (String basePackageName : basePackages) {
-//			if(!StringUtils.isNotEmpty(basePackageName)){
-//				continue;
-//			}
-////			if (Strings.isNullOrEmpty(basePackageName)) {
-////				continue;
-////			}
-//			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + basePackageName + "/"
-//					+ resourcePattern;
-//			try {
-//				Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
-//				for (Resource resource : resources) {
-//					if (!resource.isReadable()) {
-//						return;
-//					}
-//					MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
-//					ClassMetadata classMetadata = metadataReader.getClassMetadata();
-//					if (!GeneratedMessage.class.getName().equals(classMetadata.getSuperClassName())) {
-//						continue;
-//					}
-//					String className = classMetadata.getClassName();
-//					Class<?> clazz = ClassUtils.forName(className, ClassUtils.getDefaultClassLoader());
-//					Method getDefaultInstance = ReflectionUtils.findMethod(clazz, DEFAULT_INSTANCE_METHOD);
-//					if (getDefaultInstance != null) {
-//						Short shortCmd = classCmd(className);
-//						Message existMessage = cmd2Message.get(shortCmd);
-//						if (existMessage != null) {
-//							throw new IllegalStateException(String.format("Ambiguous message found. "
-//									+ "Cannot map message: %s onto: %s, There is already message: %s mapped", clazz,
-//									shortCmd, existMessage.getClass()));
-//						}
-//						Message messageLite = (Message) ReflectionUtils.invokeMethod(getDefaultInstance, null);
-//						cmd2Message.put(shortCmd, messageLite);
-//						messageClass2Cmd.put(clazz, shortCmd);
-//					}
-//				}
-//			} catch (IOException e) {
-//			} catch (ClassNotFoundException e) {
-//			} catch (LinkageError e) {
-//			}
-//		}
-//	}
 
 	public Message message(short cmd) {
 		return cmd2Message.get(cmd);
@@ -182,8 +113,4 @@ public class ProtobufMapping{
 		return messageClass2Cmd.get(clazz);
 	}
 
-	public static Short classCmd(String className) {
-		String cmd = className.substring(className.indexOf(CMD_SEPARATOR) + 1);
-		return Short.valueOf(cmd);
-	}
 }

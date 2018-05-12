@@ -6,11 +6,13 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 
 import com.google.protobuf.Message;
-import com.rpg.framework.protobuf.ProtobufMapping;
+import com.rpg.framework.config.ServerConfig;
 
 public class Response {
 
 	private final Log log = LogFactory.getLog(this.getClass());
+	
+	private static final char CMD_SEPARATOR = '_';
 
 	// 具体业务逻辑
 
@@ -20,8 +22,8 @@ public class Response {
 
 	private Message message;
 
-	private Response( Message message) {
-		this.cmd = ProtobufMapping.classCmd(message.getClass().getName());
+	private Response(Message message) {
+		this.cmd = this.classCmd(message.getClass().getName());
 		this.message = message;
 	}
 
@@ -34,6 +36,11 @@ public class Response {
 	 */
 	public static Response createErrResponse(Message message) {
 		return new Response(message);
+	}
+	
+	private Short classCmd(String className) {
+		String cmd = className.substring(className.indexOf(CMD_SEPARATOR) + 1);
+		return Short.valueOf(cmd);
 	}
 
 	// /**
@@ -54,7 +61,7 @@ public class Response {
 		if (message != null)
 			data = message.toByteArray();
 
-		totalBuffer.writeInt(data.length + ProtobufMapping.HEAD_SZIE);
+		totalBuffer.writeInt(data.length + ServerConfig.HEAD_SZIE);
 		totalBuffer.writeByte(flag);
 		totalBuffer.writeShort(cmd);
 		totalBuffer.writeShort(error);

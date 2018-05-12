@@ -20,13 +20,13 @@ public class RobotHandler extends SimpleChannelHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		final Request command = (Request) e.getMessage();
-		int cmd = Robot.protobufMapping.messageCmd(command.getMessage().getClass()).shortValue();
-		if (command.getError() == 0) {
-			log.warn("cmd:" + cmd + "->" + TextFormat.printToString(command.getMessage().toBuilder()));
-		} else {
-			ErrorCode error = ErrorCode.getErrorCode(command.getError());
-			log.warn("cmd:" + cmd + ",error:" + error.getCode() + "->" + error.getDesc());
-		}
+//		int cmd = Robot.protobufMapping.messageCmd(command.getMessage().getClass()).shortValue();
+//		if (command.getError() == 0) {
+//			log.warn("cmd:" + cmd + "->" + TextFormat.printToString(command.getMessage().toBuilder()));
+//		} else {
+//			ErrorCode error = ErrorCode.getErrorCode(command.getError());
+//			log.warn("cmd:" + cmd + ",error:" + error.getCode() + "->" + error.getDesc());
+//		}
 
 	}
 

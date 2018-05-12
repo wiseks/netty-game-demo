@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.rpg.framework.annotation.MessageController;
 import com.rpg.framework.annotation.MessageRequest;
 import com.rpg.framework.code.Response;
-import com.rpg.framework.dispatch.CommandDispatcher;
+import com.rpg.framework.handler.ServerHandlerDispatcher;
 import com.rpg.framework.session.UserSession;
 import com.rpg.logic.player.service.PlayerService;
 
@@ -22,7 +22,7 @@ public class PlayerHandler {
 	private PlayerService playerService;
 	
 	@Autowired
-	private CommandDispatcher commandDispatcher;
+	private ServerHandlerDispatcher commandDispatcher;
 	
 	@MessageRequest(nocheck=true)
 	public Response getUser(LoginReqMsg_12001 msg){

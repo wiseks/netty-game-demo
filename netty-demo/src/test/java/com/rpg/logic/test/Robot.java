@@ -24,7 +24,6 @@ import com.google.protobuf.Message;
 import com.rpg.framework.code.ProtobufDecoder;
 import com.rpg.framework.code.ProtobufEncoder;
 import com.rpg.framework.code.Response;
-import com.rpg.framework.protobuf.ProtobufMapping;
 
 public class Robot {
 
@@ -35,7 +34,7 @@ public class Robot {
 
 	private ClientBootstrap clientBootstrap = new ClientBootstrap(clientSocketChannelFactory);
 
-	public static ProtobufMapping protobufMapping;
+	//public static ProtobufMapping protobufMapping;
 
 	protected ChannelFuture futrue;
 
@@ -71,24 +70,24 @@ public class Robot {
 	
 	}
 
-	public ChannelFuture startup() throws Exception {
-		protobufMapping = new ProtobufMapping();
-		clientBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-
-			public ChannelPipeline getPipeline() throws Exception {
-				ChannelPipeline pipeline = Channels.pipeline();
-				pipeline.addLast("encoder", new ProtobufDecoder(protobufMapping));
-				pipeline.addLast("decoder", new ProtobufEncoder());
-				pipeline.addLast("handler", new RobotHandler());
-				return pipeline;
-			}
-		}); // 只能这样设置
-		clientBootstrap.setOption("tcpNoDelay", true);
-		clientBootstrap.setOption("keepAlive", true);
-		ChannelFuture future = clientBootstrap.connect(new InetSocketAddress(host, port));
-
-		return future;
-	}
+//	public ChannelFuture startup() throws Exception {
+//		protobufMapping = new ProtobufMapping();
+//		clientBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+//
+//			public ChannelPipeline getPipeline() throws Exception {
+//				ChannelPipeline pipeline = Channels.pipeline();
+//				pipeline.addLast("encoder", new ProtobufDecoder(protobufMapping));
+//				pipeline.addLast("decoder", new ProtobufEncoder());
+//				pipeline.addLast("handler", new RobotHandler());
+//				return pipeline;
+//			}
+//		}); // 只能这样设置
+//		clientBootstrap.setOption("tcpNoDelay", true);
+//		clientBootstrap.setOption("keepAlive", true);
+//		ChannelFuture future = clientBootstrap.connect(new InetSocketAddress(host, port));
+//
+//		return future;
+//	}
 
 	public void move(Point point) {
 		PlayerMoveNewReqMsg_13118.Builder req = PlayerMoveNewReqMsg_13118.newBuilder();
@@ -121,7 +120,7 @@ public class Robot {
 	public synchronized void sendMsg(Message message) {
 		try {
 			if (futrue == null)
-				futrue = startup();
+				//futrue = startup();
 			if (futrue != null) {
 				// signal.set(true);
 				Response res = Response.createResponse(message);

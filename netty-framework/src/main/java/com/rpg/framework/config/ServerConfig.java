@@ -9,6 +9,8 @@ import org.apache.commons.lang.math.NumberUtils;
 /**
  */
 public class ServerConfig {
+	
+	public static final int HEAD_SZIE = 9;
 
 	private int threadNum = 500;
 

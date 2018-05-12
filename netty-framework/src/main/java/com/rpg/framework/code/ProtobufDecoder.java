@@ -9,16 +9,19 @@ import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 
 import com.google.protobuf.Message;
-import com.rpg.framework.protobuf.ProtobufMapping;
+import com.rpg.framework.config.ServerConfig;
+import com.rpg.framework.handler.ServerHandlerDispatcher;
 
 public class ProtobufDecoder extends FrameDecoder {
+	
+	private static final int HEAD_SZIE = 9;
 
 	private final Log log = LogFactory.getLog(this.getClass());
 
-	private ProtobufMapping protobufMapping;
+	private ServerHandlerDispatcher dispatcher;
 
-	public ProtobufDecoder(ProtobufMapping protobufMapping) {
-		this.protobufMapping = protobufMapping;
+	public ProtobufDecoder(ServerHandlerDispatcher dispatcher) {
+		this.dispatcher = dispatcher;
 	}
 
 	@Override
@@ -28,7 +31,7 @@ public class ProtobufDecoder extends FrameDecoder {
 		// flag 1
 		// cmd 2
 		// error 2
-		if (buffer.readableBytes() < ProtobufMapping.HEAD_SZIE) {
+		if (buffer.readableBytes() < ServerConfig.HEAD_SZIE) {
 			return null;
 		}
 
@@ -47,11 +50,11 @@ public class ProtobufDecoder extends FrameDecoder {
 		// log.info("len:" + len + ",flag:" + flag + ",cmd:" + cmd + ",error:"
 		// + error);
 
-		byte[] conData = new byte[len - ProtobufMapping.HEAD_SZIE];
+		byte[] conData = new byte[len - ServerConfig.HEAD_SZIE];
 
 		buffer.readBytes(conData);
 
-		Message msg = protobufMapping.message(cmd);
+		Message msg = dispatcher.message(cmd);
 
 		if (msg != null) {
 			Message message = null;
