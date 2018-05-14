@@ -4,8 +4,8 @@ import java.net.InetSocketAddress;
 
 import org.apache.log4j.Logger;
 
-import com.rpg.framework.code.ProtobufDecoder;
-import com.rpg.framework.code.ProtobufEncoder;
+import com.rpg.framework.code.Decoder;
+import com.rpg.framework.code.Encoder;
 import com.rpg.framework.handler.ServerHandler;
 import com.rpg.framework.handler.ServerHandlerDispatcher;
 
@@ -37,9 +37,9 @@ public abstract class AbstractServer {
 			@Override
 			protected void initChannel(SocketChannel ch) throws Exception {
 				ch.pipeline()
-				.addLast("decoder", new ProtobufDecoder())
+				.addLast("decoder", new Decoder())
 				.addLast("server-handler", gameServerHandler)
-				.addLast("encoder", new ProtobufEncoder());
+				.addLast("encoder", new Encoder());
 			}
 		});
 		try {

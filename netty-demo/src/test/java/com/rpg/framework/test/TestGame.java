@@ -14,8 +14,8 @@ import org.junit.Before;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.protobuf.Message;
-import com.rpg.framework.code.ProtobufDecoder;
-import com.rpg.framework.code.ProtobufEncoder;
+import com.rpg.framework.code.Decoder;
+import com.rpg.framework.code.Encoder;
 import com.rpg.framework.code.Response;
 import com.rpg.framework.handler.ServerHandlerDispatcher;
 import com.rpg.logic.server.ServerStart;
@@ -68,9 +68,9 @@ public abstract class TestGame extends TestCase {
 			@Override
 			protected void initChannel(SocketChannel ch) throws Exception {
 				ch.pipeline()
-				.addLast("decoder", new ProtobufDecoder())
+				.addLast("decoder", new Decoder())
 				.addLast("server-handler", new ClientHandler())
-				.addLast("encoder", new ProtobufEncoder())
+				.addLast("encoder", new Encoder())
 				;
 			}
 		});
