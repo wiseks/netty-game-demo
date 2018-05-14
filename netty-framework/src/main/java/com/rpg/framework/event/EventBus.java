@@ -22,24 +22,15 @@ import com.rpg.framework.annotation.EventMethod;
 @Component
 public class EventBus {
 	
-	class Holdler {
+	private class Holdler {
 		
 		private Object owner;
 		private Method method;
 
-		public Holdler(Object owner, Method method) {
+		private Holdler(Object owner, Method method) {
 			this.owner = owner;
 			this.method = method;
 		}
-
-		public Object getOwner() {
-			return owner;
-		}
-
-		public Method getMethod() {
-			return method;
-		}
-		
 	}
 
 	@Autowired
@@ -48,6 +39,9 @@ public class EventBus {
 	private Map<Class<?>,Holdler> classMap = new ConcurrentHashMap<Class<?>, Holdler>();
 	
 	public void post(Object event){
+		if(event==null){
+			return;
+		}
 		Class<?> clazz = event.getClass();
 		Holdler holder = classMap.get(clazz);
 		if(holder!=null){
