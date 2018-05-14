@@ -69,52 +69,15 @@ public class ServerHandlerDispatcher{
 			return;
 
 		long starttime = System.currentTimeMillis();
-		Message msg = this.message(cmd.getCmd());
-		if (msg != null) {
-			try {
-				msg = msg.getParserForType().parseFrom(cmd.getBytes());
-			} catch (Exception e) {
-				context.channel().close();
-				e.printStackTrace();
-				log.error("error:",e.getCause());
-				return;
-			}
-		} else {
-			context.channel().close();
-			log.error("ProtobufDecoder error! cmd:[" + cmd + "] is not exist");
+		Message msg = this.message(cmd.getCmd(),cmd.getBytes());
+		if(msg==null){
+			return;
+		}
+		boolean isCheck = this.check(context, msg);
+		if(!isCheck){
 			return;
 		}
 		CommandHandlerHolder holder = handlers.get(msg.getClass());
-		boolean isClose = handlerCloses.get(msg.getClass().getSimpleName());
-		if (null == holder || null == holder.method || null == holder.owner) {
-			log.error("RECIVE|No handler or method for cmd:" + cmd);
-			return;
-		}
-		if(isClose){
-			log.error("RECIVE|Close handler or method for cmd:" + cmd);
-			return;
-		}
-		if (!serverConfig.isDebug()) { // 是否调试模式
-			if (holder.noCheck()) { // 有些协议不需要如何安全校验，比如登录，看战报
-
-			} else {
-				if (holder.checkLogin()) {// 是否需要登录后才能操作
-					if (!sessionHolder.isOnline(context.channel())) {
-						context.channel().close();
-						log.warn("no login1...");
-						return;
-					}else{
-						UserSession<Object> session = sessionHolder.get(context.channel());
-						if(session.getId()==null){
-							context.channel().close();
-							log.warn("no login2...");
-							return;
-						}
-					}
-				}
-			}
-		}
-		
 		UserSession<Object> session =  sessionHolder.get(context.channel());
 		Lock lock = null;
 		if(session==null){
@@ -225,17 +188,61 @@ public class ServerHandlerDispatcher{
 	}
 	
 	
-	public Message message(short cmd) {
-		return cmd2Message.get(cmd);
+	public Message message(short cmd,byte[] bytes) {
+		Message msg = cmd2Message.get(cmd);
+		if (msg != null) {
+			try {
+				msg = msg.getParserForType().parseFrom(bytes);
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("error:",e.getCause());
+				return null;
+			}
+		} else {
+			log.error("ProtobufDecoder error! cmd:[" + cmd + "] is not exist");
+			return null;
+		}
+		return msg;
+	}
+	
+	private boolean check(ChannelHandlerContext context,Message msg){
+		CommandHandlerHolder holder = handlers.get(msg.getClass());
+		boolean isClose = handlerCloses.get(msg.getClass().getSimpleName());
+		if (null == holder || null == holder.method || null == holder.owner) {
+			log.error("RECIVE|No handler or method for cmd:" + msg);
+			return false;
+		}
+		if(isClose){
+			log.error("RECIVE|Close handler or method for cmd:" + msg);
+			return false;
+		}
+		if (!serverConfig.isDebug()) { // 是否调试模式
+			if (holder.noCheck()) { // 有些协议不需要如何安全校验，比如登录，看战报
+				return true;
+			} else {
+				if (holder.checkLogin()) {// 是否需要登录后才能操作
+					if (!sessionHolder.isOnline(context.channel())) {
+						context.channel().close();
+						log.warn("no login1...");
+						return false;
+					}else{
+						UserSession<Object> session = sessionHolder.get(context.channel());
+						if(session.getId()==null){
+							context.channel().close();
+							log.warn("no login2...");
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
 	 * 消息处理方法容器
 	 */
 	public static class CommandHandlerHolder {
-
-		public CommandHandlerHolder() {
-		}
 
 		public CommandHandlerHolder(Object owner, Method m, int paramSize, MessageRequest cmd) {
 			this.owner = owner;
