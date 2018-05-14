@@ -2,8 +2,6 @@ package com.rpg.framework.handler;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
@@ -25,7 +23,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 
 /**
- * 游戏消息接受处理器
+ * 消息接受处理器
  */
 @io.netty.channel.ChannelHandler.Sharable
 @Service
@@ -47,8 +45,6 @@ public class ServerHandler<K> extends ChannelInboundHandlerAdapter {
 	
 	private static volatile boolean SERVER_RUN = true;
 	
-	private AtomicInteger i = new AtomicInteger();
-
 	@PostConstruct
 	public void init() {
 		service = Executors.newFixedThreadPool(serverConfig.getThreadNum(),
