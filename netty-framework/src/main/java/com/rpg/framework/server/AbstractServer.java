@@ -1,7 +1,6 @@
 package com.rpg.framework.server;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 
@@ -10,7 +9,6 @@ import com.rpg.framework.code.ProtobufEncoder;
 import com.rpg.framework.handler.ServerHandler;
 import com.rpg.framework.handler.ServerHandlerDispatcher;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -35,14 +33,6 @@ public abstract class AbstractServer {
 		bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
 				.option(ChannelOption.SO_BACKLOG, 5).option(ChannelOption.TCP_NODELAY, true);
 
-//		bootstrap.handler(new ChannelInitializer<SocketChannel>() {
-//			@Override
-//			protected void initChannel(SocketChannel ch) throws Exception {
-//				ch.pipeline().addLast("decoder", new ProtobufDecoder(dispatcher))
-//						.addLast("server-handler", gameServerHandler).addLast("encoder", new ProtobufEncoder());
-//			}
-//		});
-
 		bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
 			@Override
 			protected void initChannel(SocketChannel ch) throws Exception {
@@ -58,24 +48,6 @@ public abstract class AbstractServer {
 			log.error("bind " + address.getHostName() + ":" + address.getPort() + " failed", e);
 			shutdown();
 		}
-
-		// bootstrap.setOption("child.tcpNoDelay", true);
-		// bootstrap.setOption("child.keepAlive", true);
-		// bootstrap.setOption("reuseAddress", true);
-		//
-		// bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-		// public ChannelPipeline getPipeline() {
-		// ChannelPipeline pipeline = Channels.pipeline();
-		// // pipeline.addLast("decoder", new MyDecoder());
-		// // pipeline.addLast("encoder", new MyEncoder());
-		//
-		// pipeline.addLast("decoder", new ProtobufDecoder(dispatcher));
-		// pipeline.addLast("encoder", new ProtobufEncoder());
-		//
-		// pipeline.addLast("handler", gameServerHandler);
-		// return pipeline;
-		// }
-		// });
 
 		bootstrap.bind(address);
 
