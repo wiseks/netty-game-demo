@@ -2,11 +2,8 @@ package com.rpg.framework.code;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
 
 import com.google.protobuf.Message;
-import com.rpg.framework.config.ServerConfig;
 
 public class Response {
 
@@ -50,34 +47,6 @@ public class Response {
 	// return new Response(code, null);
 	// }
 
-	public ChannelBuffer encode() {
-		// 包头9个字节
-		// len 4
-		// flag 1
-		// cmd 2
-		// error 2
-		ChannelBuffer totalBuffer = ChannelBuffers.dynamicBuffer();
-		byte[] data = new byte[0];
-		if (message != null)
-			data = message.toByteArray();
-
-		totalBuffer.writeInt(data.length + ServerConfig.HEAD_SZIE);
-		totalBuffer.writeByte(flag);
-		totalBuffer.writeShort(cmd);
-		totalBuffer.writeShort(error);
-		totalBuffer.writeBytes(data);
-
-		// TODO 测试打印压缩
-		// byte[] c_data = ZLibUtils.compress(data);
-		//
-		// if (data.length > 1024)
-		// log.info("cmd " + cmd + " data packet size:" + (data.length +
-		// ProtobufMapping.HEAD_SZIE)
-		// + " -> compress size:" + (c_data.length +
-		// ProtobufMapping.HEAD_SZIE));
-
-		return totalBuffer;
-	}
 
 	public Message getMessage() {
 		return message;
@@ -86,5 +55,14 @@ public class Response {
 	public short getCmd() {
 		return cmd;
 	}
+
+	public byte getFlag() {
+		return flag;
+	}
+
+	public short getError() {
+		return error;
+	}
+	
 
 }

@@ -12,8 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +19,9 @@ import com.google.protobuf.Message;
 import com.rpg.framework.code.Response;
 import com.rpg.framework.config.CoreThreadFactory;
 import com.rpg.framework.event.EventBus;
+
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * 用户管理器
@@ -120,7 +121,7 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 	private int remove(UserSession<K> session) {
 		try {
 			if (session != null) {
-				if (session.getChannel().isConnected())
+				if (session.getChannel().isActive())
 					session.getChannel().disconnect();
 				return 1;
 			}
@@ -161,7 +162,7 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 			return;
 		try {
 			Channel c = session.getChannel();
-			if (null != c && c.isConnected()) {
+			if (null != c && c.isActive()) {
 				Response response = Response.createResponse(message);
 				c.write(response);
 			} else {
@@ -182,14 +183,21 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 	}
 
 	public void onChannelClose(ChannelHandlerContext ctx) {
-		System.out.println("CloseService onChannelClose...");
-		UserSession<K> session = this.get(ctx.getChannel());
+		UserSession<K> session = this.get(ctx.channel());
 		if (session != null) {
 			K id = session.getId();
-			this.remove(id);
-			eventBus.post(new ChannelCloseEvent<K>(session));
-			System.out.println("removePlayerId:" + id);
+			if(id!=null){
+				this.remove(id);
+				eventBus.post(new ChannelCloseEvent<K>(session));
+				System.out.println(this.getClass().getName()+"| closeService onChannelClose...id="+id);
+			}
+			this.removeChannel(session);
 		}
+	}
+
+	@Override
+	public void removeChannel(UserSession<K> session) {
+		this.c2s.remove(session.getChannel());
 	}
 
 }

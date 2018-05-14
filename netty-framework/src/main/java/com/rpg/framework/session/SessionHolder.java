@@ -2,10 +2,11 @@ package com.rpg.framework.session;
 
 import java.util.Set;
 
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
 
 import com.google.protobuf.Message;
+
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * 保持所有建立链接的会话信息
@@ -33,6 +34,8 @@ public interface SessionHolder<K> {
 	public UserSession<K> get(K id);
 	
 	public UserSession<K> get(Channel channel);
+	
+	public void removeChannel(UserSession<K> session);
 
 	/**
 	 * 移除一个用户

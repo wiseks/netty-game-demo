@@ -5,16 +5,11 @@ import java.net.InetSocketAddress;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.TestCase;
 import xn.protobuf.login.LoginMsg.LoginReqMsg_12001;
 
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
 import org.junit.Before;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -25,16 +20,24 @@ import com.rpg.framework.code.Response;
 import com.rpg.framework.handler.ServerHandlerDispatcher;
 import com.rpg.logic.server.ServerStart;
 
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+
 public abstract class TestGame extends TestCase {
 
 	public final int port = 6000;
 	public final String host = "127.0.0.1";
 	// public final String host = "192.168.0.250";
 	// public final String host = "120.24.16.23";
-	private OioClientSocketChannelFactory clientSocketChannelFactory = new OioClientSocketChannelFactory(
-			Executors.newCachedThreadPool());
+	
+	private AtomicInteger index = new AtomicInteger();
 
-	private ClientBootstrap clientBootstrap = new ClientBootstrap(clientSocketChannelFactory);
+	private Bootstrap bootstrap;
 
 	public static ProtobufMapping protobufMapping;
 
@@ -45,31 +48,34 @@ public abstract class TestGame extends TestCase {
 
 	@Before
 	public ChannelFuture startup() throws Exception {
-		
+
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
 
-
 		Properties properties = new Properties();
-		properties.load(new InputStreamReader(ServerStart.class.getResourceAsStream("/game_resources/system.properties"), "UTF-8"));
+		properties.load(new InputStreamReader(
+				ServerStart.class.getResourceAsStream("/game_resources/system.properties"), "UTF-8"));
 		System.setProperty("log4jdir", properties.getProperty("log4jdir"));
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application-test.xml");
 		ServerHandlerDispatcher dispatcher = context.getBean(ServerHandlerDispatcher.class);
-//		protobufMapping = new ProtobufMapping();
-		//protobufMapping.initialize();
-		//protobufMapping.init();
-		clientBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+		// protobufMapping = new ProtobufMapping();
+		// protobufMapping.initialize();
+		// protobufMapping.init();
+		NioEventLoopGroup worker = new NioEventLoopGroup();
+		bootstrap = new Bootstrap();
+		bootstrap.group(worker).channel(NioSocketChannel.class);
 
-			public ChannelPipeline getPipeline() throws Exception {
-				ChannelPipeline pipeline = Channels.pipeline();
-				pipeline.addLast("encoder", new ProtobufDecoder(dispatcher));
-				pipeline.addLast("decoder", new ProtobufEncoder());
-				pipeline.addLast("handler", new ClientHandler());
-				return pipeline;
+		bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+			@Override
+			protected void initChannel(SocketChannel ch) throws Exception {
+				ch.pipeline()
+				.addLast("decoder", new ProtobufDecoder())
+				.addLast("server-handler", new ClientHandler())
+				.addLast("encoder", new ProtobufEncoder())
+				;
 			}
-		}); // 只能这样设置
-		clientBootstrap.setOption("tcpNoDelay", true);
-		clientBootstrap.setOption("keepAlive", true);
-		ChannelFuture future = clientBootstrap.connect(new InetSocketAddress(host, port));
+		});
+
+		ChannelFuture future = bootstrap.connect(host, port).sync();
 		this.futrue = future;
 		return future;
 	}
@@ -93,7 +99,11 @@ public abstract class TestGame extends TestCase {
 				signal.set(true);
 				Response res = Response.createResponse(message);
 				cmd = res.getCmd();
-				futrue.getChannel().write(res);
+				futrue.channel().writeAndFlush(res);
+//				if(index.incrementAndGet()>=1000){
+//					futrue.channel().close();
+//				}
+				System.out.println(">>>>>>>>>>>>>>>"+res+","+index.incrementAndGet());
 //				while (signal.get()) {
 //				}
 			}

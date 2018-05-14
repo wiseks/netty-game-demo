@@ -73,7 +73,7 @@ public class SenceService {
 	public void move(Player player,int x,int y){
 		a ++;
 		System.out.println("playerId="+player.getPlayerId()+",move to,x="+x+",y="+y+",index="+a);
-		eventBus.post(new MyEvent(x, y, player.getPlayerId()));
+		//eventBus.post(new MyEvent(x, y, player.getPlayerId()));
 		Sence sence = senceMap.get(player.getSenceId());
 		if(sence!=null){
 			PlayerMoveData data = new PlayerMoveData(player.getPlayerId(),x,y,sence.getSenceId());

@@ -29,13 +29,10 @@ public class GameServer extends AbstractServer {
 	private ServerHandler<Integer> gameServerHandler;
 
 
-	// @Autowired
-	// private CloseService closeService;
 
 	@Autowired
 	private ServerHandlerDispatcher dispatcher;
 
-	@SuppressWarnings("restriction")
 	@PostConstruct
 	public void init() {
 		Set<InetSocketAddress> addressSet = serverConfig.getInetSocketAddressSet();

@@ -1,53 +1,27 @@
 package com.rpg.framework.code;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelDownstreamHandler;
+import com.google.protobuf.Message;
+import com.rpg.framework.config.ServerConfig;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 
-public class ProtobufEncoder extends SimpleChannelDownstreamHandler {
+public class ProtobufEncoder extends MessageToByteEncoder<Response> {
+
 
 
 	@Override
-	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, Response msg, ByteBuf out) throws Exception {
+		byte[] data = new byte[0];
+		Message message = msg.getMessage();
+		if (message != null)
+			data = message.toByteArray();
 
-		ChannelBuffer totalBuffer = ChannelBuffers.dynamicBuffer();
-		Response response = (Response) e.getMessage();
-		totalBuffer.writeBytes(response.encode());
-		Channels.write(ctx, e.getFuture(), totalBuffer);
-
-		// 包头9个字节
-		// len 4
-		// flag 1
-		// cmd 2
-		// error 2
-		// ChannelBuffer totalBuffer = ChannelBuffers.dynamicBuffer();
-		//
-		// Object msg = e.getMessage();
-		// Class<?> msgClass = msg.getClass();
-		//
-		// Message message = null;
-		// if (msg instanceof Message) {
-		// message = (Message) msg;
-		// }
-		// if (msg instanceof Builder) {
-		// message = ((Builder) msg).build();
-		// msgClass = message.getClass();
-		// }
-		//
-		// short cmd = protobufMapping.messageCmd(msgClass);
-		//
-		// byte[] con = message.toByteArray();
-		//
-		// int msgLen = con.length;
-		// totalBuffer.writeInt(CmdId.HEAD_SZIE + msgLen);
-		// totalBuffer.writeByte(0);
-		// totalBuffer.writeShort(cmd);
-		// totalBuffer.writeShort(2);
-		// totalBuffer.writeBytes(con);
-		// Channels.write(ctx, e.getFuture(), totalBuffer);
+		out.writeInt(data.length + ServerConfig.HEAD_SZIE);
+		out.writeByte(msg.getFlag());
+		out.writeShort(msg.getCmd());
+		out.writeShort(msg.getError());
+		out.writeBytes(data);
 	}
 }

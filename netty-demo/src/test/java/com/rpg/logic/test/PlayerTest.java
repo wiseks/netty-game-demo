@@ -25,12 +25,18 @@ public class PlayerTest extends TestGame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for(int i=0;i<10;i++){
+		for(int i=0;i<1000;i++){
 			PlayerMoveNewReqMsg_13118.Builder msg1 = PlayerMoveNewReqMsg_13118.newBuilder();
 			msg1.setX(i);
 			msg1.setY(i);
 //			channelContext.getChannel().write(msg1.build());
 			this.sendMsg(msg1.build());
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 //		PlayerLoginNewReqMsg_16013.Builder req1 = PlayerLoginNewReqMsg_16013.newBuilder();

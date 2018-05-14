@@ -11,6 +11,11 @@ import org.apache.commons.lang.math.NumberUtils;
 public class ServerConfig {
 	
 	public static final int HEAD_SZIE = 9;
+	
+	/**
+	 * 未处理消息上限
+	 */
+	private int messageCount = 300;
 
 	private int threadNum = 500;
 
@@ -86,5 +91,14 @@ public class ServerConfig {
 	public String getSid() {
 		return getDomain().split("\\.")[0];
 	}
+
+	public int getMessageCount() {
+		return messageCount;
+	}
+
+	public void setMessageCount(int messageCount) {
+		this.messageCount = messageCount;
+	}
+	
 
 }

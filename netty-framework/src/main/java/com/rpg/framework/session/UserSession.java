@@ -1,10 +1,12 @@
 package com.rpg.framework.session;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+
 
 /**
  * 用戶通道
@@ -15,6 +17,16 @@ public class UserSession<K> {
 
 	private ChannelHandlerContext channelContext;
 	private K id;
+	
+	private AtomicInteger messageCount = new AtomicInteger();
+	
+	public int incrementAndGet(){
+		return messageCount.incrementAndGet();
+	}
+	
+	public int decrementAndGet(){
+		return messageCount.decrementAndGet();
+	}
 
 	public UserSession(ChannelHandlerContext channelContext) {
 		this.channelContext = channelContext;
@@ -30,7 +42,7 @@ public class UserSession<K> {
 	}
 
 	public Channel getChannel() {
-		return channelContext.getChannel();
+		return channelContext.channel();
 	}
 
 	public ChannelHandlerContext getChannelContext() {

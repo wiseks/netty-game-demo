@@ -1,79 +1,41 @@
 package com.rpg.framework.code;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
+import java.util.List;
 
 
-import com.google.protobuf.Message;
 import com.rpg.framework.config.ServerConfig;
-import com.rpg.framework.handler.ServerHandlerDispatcher;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 
-public class ProtobufDecoder extends FrameDecoder {
-	
-	private static final int HEAD_SZIE = 9;
+public class ProtobufDecoder extends ByteToMessageDecoder {
 
-	private final Log log = LogFactory.getLog(this.getClass());
-
-	private ServerHandlerDispatcher dispatcher;
-
-	public ProtobufDecoder(ServerHandlerDispatcher dispatcher) {
-		this.dispatcher = dispatcher;
-	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		// 包头9个字节
 		// len 4
 		// flag 1
 		// cmd 2
 		// error 2
-		if (buffer.readableBytes() < ServerConfig.HEAD_SZIE) {
-			return null;
+		if (in.readableBytes() < ServerConfig.HEAD_SZIE) {
+			return ;
 		}
-
-		int len = buffer.readInt();
-
+		in.markReaderIndex();
+		int len = in.readInt();
 		// 防止超过1024
-		if (buffer.readableBytes() < len - 4) {
-			buffer.resetReaderIndex();
-			return null;
+		if (in.readableBytes() < len - 4) {
+			in.resetReaderIndex();
+			return ;
 		}
 
-		byte flag = buffer.readByte();
-		short cmd = buffer.readShort();
-		short error = buffer.readShort();
-
-		// log.info("len:" + len + ",flag:" + flag + ",cmd:" + cmd + ",error:"
-		// + error);
-
+		byte flag = in.readByte();
+		short cmd = in.readShort();
+		short error = in.readShort();
 		byte[] conData = new byte[len - ServerConfig.HEAD_SZIE];
+		in.readBytes(conData);
+		out.add(new Request(len, flag, cmd, error, conData));
 
-		buffer.readBytes(conData);
-
-		Message msg = dispatcher.message(cmd);
-
-		if (msg != null) {
-			Message message = null;
-			try {
-				message = msg.getParserForType().parseFrom(conData);
-			} catch (Exception e) {
-				ctx.getChannel().close();
-				e.printStackTrace();
-			}
-
-			// log.info("msg=" + message.toString());
-
-			return new Request(len, flag, cmd, error, message);
-		} else {
-			ctx.getChannel().close();
-			log.error("ProtobufDecoder error! cmd:["+cmd+"] is not exist");
-		}
-
-		return null;
 	}
 
 }

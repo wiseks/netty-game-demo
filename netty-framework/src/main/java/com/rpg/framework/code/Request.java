@@ -1,9 +1,8 @@
 package com.rpg.framework.code;
 
-import org.jboss.netty.channel.ChannelHandlerContext;
 
 
-import com.google.protobuf.Message;
+import io.netty.channel.ChannelHandlerContext;
 
 public class Request {
 
@@ -13,17 +12,15 @@ public class Request {
 	private short cmd; // 看看是用short还是int
 	private short error;
 
-	private Message message;
+	
+	private byte[] bytes;
 
-	public Request() {
-	}
-
-	public Request(int len, byte flag, short cmd, short error, Message message) {
+	public Request(int len, byte flag, short cmd, short error, byte[] bytes) {
 		this.len = len;
 		this.flag = flag;
 		this.error = error;
 		this.cmd = cmd;
-		this.message = message;
+		this.bytes = bytes;
 	}
 
 	public ChannelHandlerContext getCtx() {
@@ -42,8 +39,8 @@ public class Request {
 		return this.cmd;
 	}
 
-	public Message getMessage() {
-		return message;
+	public byte[] getBytes() {
+		return bytes;
 	}
 
 	public short getError() {

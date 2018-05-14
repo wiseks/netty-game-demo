@@ -24,6 +24,7 @@
 		<property name="ports" value="6000" />
 		<property name="threadNum" value="500" />
 		<property name="debug" value="false" />
+		<property name="messageCount" value="300" />
 	</bean>
 	
 </beans>

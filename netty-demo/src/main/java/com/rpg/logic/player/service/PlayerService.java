@@ -3,7 +3,6 @@ package com.rpg.logic.player.service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jboss.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,7 @@ import com.rpg.logic.player.domain.Player;
 import com.rpg.logic.player.domain.User;
 import com.rpg.logic.utils.PlayerNameUtil;
 
+import io.netty.channel.ChannelHandlerContext;
 import xn.protobuf.player.PlayerMsg.PlayerCreateNewResMsg_16012;
 import xn.protobuf.player.PlayerMsg.PlayerDataNew;
 import xn.protobuf.player.PlayerMsg.PlayerLoginNewResMsg_16014;
@@ -77,7 +77,7 @@ public class PlayerService {
 		players.put(player.getPlayerId(), player);
 //		Attachment attachment = (Attachment)channelContext.getAttachment();
 //		attachment.setPlayerId(player.getPlayerId());
-		UserSession<Integer> userSession = sessionHolder.get(channelContext.getChannel());
+		UserSession<Integer> userSession = sessionHolder.get(channelContext.channel());
 		userSession.setId(player.getPlayerId());
 		sessionHolder.put(userSession.getId(),userSession);
 		player.setSessionHolder(sessionHolder);

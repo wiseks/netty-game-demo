@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,8 @@ import com.rpg.framework.code.Response;
 import com.rpg.framework.config.ServerConfig;
 import com.rpg.framework.session.SessionHolder;
 import com.rpg.framework.session.UserSession;
+
+import io.netty.channel.ChannelHandlerContext;
 
 
 /**
@@ -68,9 +69,23 @@ public class ServerHandlerDispatcher{
 			return;
 
 		long starttime = System.currentTimeMillis();
-
-		CommandHandlerHolder holder = handlers.get(cmd.getMessage().getClass());
-		boolean isClose = handlerCloses.get(cmd.getMessage().getClass().getSimpleName());
+		Message msg = this.message(cmd.getCmd());
+		if (msg != null) {
+			try {
+				msg = msg.getParserForType().parseFrom(cmd.getBytes());
+			} catch (Exception e) {
+				context.channel().close();
+				e.printStackTrace();
+				log.error("error:",e.getCause());
+				return;
+			}
+		} else {
+			context.channel().close();
+			log.error("ProtobufDecoder error! cmd:[" + cmd + "] is not exist");
+			return;
+		}
+		CommandHandlerHolder holder = handlers.get(msg.getClass());
+		boolean isClose = handlerCloses.get(msg.getClass().getSimpleName());
 		if (null == holder || null == holder.method || null == holder.owner) {
 			log.error("RECIVE|No handler or method for cmd:" + cmd);
 			return;
@@ -84,14 +99,14 @@ public class ServerHandlerDispatcher{
 
 			} else {
 				if (holder.checkLogin()) {// 是否需要登录后才能操作
-					if (!sessionHolder.isOnline(context.getChannel())) {
-						context.getChannel().close();
+					if (!sessionHolder.isOnline(context.channel())) {
+						context.channel().close();
 						log.warn("no login1...");
 						return;
 					}else{
-						UserSession<Object> session = sessionHolder.get(context.getChannel());
+						UserSession<Object> session = sessionHolder.get(context.channel());
 						if(session.getId()==null){
-							context.getChannel().close();
+							context.channel().close();
 							log.warn("no login2...");
 							return;
 						}
@@ -100,37 +115,39 @@ public class ServerHandlerDispatcher{
 			}
 		}
 		
-		UserSession<Object> session =  sessionHolder.get(context.getChannel());
+		UserSession<Object> session =  sessionHolder.get(context.channel());
 		Lock lock = null;
 		if(session==null){
-			session = new UserSession<Object>(context);
-			sessionHolder.put(session.getChannel(),session);
+			context.channel().close();
+			log.error("session is null");
+			return;
+		}
+		int messageCount = session.incrementAndGet();
+		if(messageCount>serverConfig.getMessageCount()){
+			session.getChannel().close();
+			log.error("session message count is out of ["+serverConfig.getMessageCount()+"],current message count is:"+messageCount+",sessionId="+session.getId());
+			return;
 		}
 		lock = session.getLock();
-//		Lock lock = null;
-//		if (context.getAttachment() == null) {
-//			Attachment attachment = new Attachment();
-//			context.setAttachment(attachment);
-//		}
-//		lock = ((Attachment) context.getAttachment()).getLock();
 		try {
 			cmd.setCtx(context);
 			lock.lock();
-			if (null != context && context.getChannel().isConnected()) {
+			if (null != context && context.channel().isActive()) {
 				Object returnValue = null;
 				if (holder.getParamSize() == 1)
-					returnValue = holder.method.invoke(holder.owner, cmd.getMessage());
+					returnValue = holder.method.invoke(holder.owner, msg);
 				if (holder.getParamSize() == 2)
-					returnValue = holder.method.invoke(holder.owner, session, cmd.getMessage());
+					returnValue = holder.method.invoke(holder.owner, session, msg);
 				else if (holder.getParamSize() == 3)
-					returnValue = holder.method.invoke(holder.owner, context, session, cmd.getMessage());
+					returnValue = holder.method.invoke(holder.owner, context, session, msg);
 
 				if (returnValue != null && returnValue instanceof Response)
-					context.getChannel().write(returnValue);
+					context.channel().write(returnValue);
 				else {
 					if (returnValue != null)
-						context.getChannel().close();
+						context.channel().close();
 				}
+				session.decrementAndGet();
 			}
 		} catch (Exception e) {
 			log.error("ERROR|Dispatcher method error occur. head:" + cmd.getCmd(), e);
