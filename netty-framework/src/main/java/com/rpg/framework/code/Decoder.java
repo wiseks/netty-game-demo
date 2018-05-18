@@ -22,7 +22,7 @@ public class Decoder extends ByteToMessageDecoder {
 			return ;
 		}
 		in.markReaderIndex();
-		int len = in.readInt();
+		short len = in.readShort();
 		// 防止超过1024
 		if (in.readableBytes() < len - 4) {
 			in.resetReaderIndex();

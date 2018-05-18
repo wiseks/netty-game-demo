@@ -18,7 +18,7 @@ public class Encoder extends MessageToByteEncoder<Response> {
 		if (message != null)
 			data = message.toByteArray();
 
-		out.writeInt(data.length + ServerConfig.HEAD_SZIE);
+		out.writeShort(data.length + ServerConfig.HEAD_SZIE);
 		out.writeByte(msg.getFlag());
 		out.writeShort(msg.getCmd());
 		out.writeShort(msg.getError());
