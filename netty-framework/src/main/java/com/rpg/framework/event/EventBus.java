@@ -2,6 +2,8 @@ package com.rpg.framework.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,23 +38,25 @@ public class EventBus {
 	@Autowired
 	private ApplicationContext context;
 	
-	private Map<Class<?>,Holdler> classMap = new ConcurrentHashMap<Class<?>, Holdler>();
+	private Map<Class<?>,List<Holdler>> classMap = new ConcurrentHashMap<>();
 	
 	public void post(Object event){
 		if(event==null){
 			return;
 		}
 		Class<?> clazz = event.getClass();
-		Holdler holder = classMap.get(clazz);
-		if(holder!=null){
-			try {
-				holder.method.invoke(holder.owner, event);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+		List<Holdler> holders = classMap.get(clazz);
+		if(holders!=null){
+			for(Holdler holder : holders){
+				try {
+					holder.method.invoke(holder.owner, event);
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -72,10 +76,12 @@ public class EventBus {
 				}
 				Class<?> clazz = paramTypes[0];
 				Holdler holder = new Holdler(bean,method);
-				if(classMap.containsKey(clazz)){
-					throw new RuntimeException("class name= ["+bean.getClass().getName()+"], method name= ["+method.getName()+"], event name = ["+clazz.getName()+"] is not only one");
+				List<Holdler> holders = classMap.get(clazz);
+				if(holders==null){
+					holders = new ArrayList<>();
+					classMap.putIfAbsent(clazz, holders);
 				}
-				classMap.putIfAbsent(clazz, holder);
+				holders.add(holder);
 			}
 		}
 	}

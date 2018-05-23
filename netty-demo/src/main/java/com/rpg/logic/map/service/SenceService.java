@@ -73,7 +73,7 @@ public class SenceService {
 	public void move(Player player,int x,int y){
 		a ++;
 		System.out.println("playerId="+player.getPlayerId()+",move to,x="+x+",y="+y+",index="+a);
-		//eventBus.post(new MyEvent(x, y, player.getPlayerId()));
+		eventBus.post(new MyEvent(x, y, player.getPlayerId()));
 		Sence sence = senceMap.get(player.getSenceId());
 		if(sence!=null){
 			PlayerMoveData data = new PlayerMoveData(player.getPlayerId(),x,y,sence.getSenceId());
@@ -93,9 +93,9 @@ public class SenceService {
 		}
 	}
 
-	public void onConn(long playerId) {
-		// TODO Auto-generated method stub
-		
+	@EventMethod
+	private void processEvent1(MyEvent e){
+		System.out.println("event11111:"+e.getPlayerId()+","+e.getX()+","+e.getY());
 	}
 	
 }

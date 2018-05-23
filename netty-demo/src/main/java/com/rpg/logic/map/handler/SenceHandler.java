@@ -40,4 +40,6 @@ public class SenceHandler {
 	private void processEvent(MyEvent e){
 		System.out.println("event:"+e.getPlayerId()+","+e.getX()+","+e.getY());
 	}
+	
+	
 }
