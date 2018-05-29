@@ -29,7 +29,7 @@ public class DisruptorUserSession<K> extends AbstractUserSession<K> {
 		super(channelContext,mapping,serverConfig,sessionHolder);
 		disruptor = new Disruptor<>(new DisruptorEventFactory(), 256, r -> {
 			AtomicInteger index = new AtomicInteger(1);
-			return new Thread(null, r, "disruptor-thread-" + index.getAndIncrement());
+			return new Thread(null, r, "disruptor-worker-thread-" + index.getAndIncrement());
 		}, ProducerType.MULTI, new YieldingWaitStrategy());
 
 		DisruptorWorkerEventHandler<K> eventHandler = new DisruptorWorkerEventHandler<K>(mapping, sessionHolder, serverConfig);

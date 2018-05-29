@@ -67,7 +67,7 @@ public class ServerHandlerDisruptorDispatcher implements IHandlerDispatcher<Obje
 		int bufferSize = serverConfig.getBufferSize();
 		disruptor = new Disruptor<>(new DisruptorEventFactory(), bufferSize, r -> {
 			AtomicInteger index = new AtomicInteger(1);
-			return new Thread(null, r, "disruptor-thread-" + index.getAndIncrement());
+			return new Thread(null, r, "disruptor-boss-thread-" + index.getAndIncrement());
 		}, ProducerType.MULTI, new YieldingWaitStrategy());
 
 		DisruptorBossEventHandler<Object> eventHandler = new DisruptorBossEventHandler<Object>( sessionHolder);
