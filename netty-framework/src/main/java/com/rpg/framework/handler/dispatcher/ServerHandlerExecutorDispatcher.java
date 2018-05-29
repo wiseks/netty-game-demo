@@ -59,7 +59,7 @@ public class ServerHandlerExecutorDispatcher implements IHandlerDispatcher<Objec
 
 		public void run() {
 			try {
-				UserSession<Object> session =  (UserSession<Object>)sessionHolder.get(context.channel());
+				AbstractUserSession<Object> session = sessionHolder.get(context.channel());
 				if(session!=null){
 					session.execute(new DispatcherEvent(context,cmd));
 				}else{

@@ -26,12 +26,12 @@
 			expression="com.rpg.framework.annotation.MessageController" />
 	</context:component-scan>
 
-	<!--  
+	<!--  -->
 	<bean name="handlerDispatcher"
-		class="com.rpg.framework.handler.dispatcher.disruptor.ServerHandlerDisruptorDispatcher"></bean>
+		class="com.rpg.framework.handler.dispatcher.ServerHandlerDisruptorDispatcher"></bean>
 		
-		-->
-	<!-- -->
-		<bean name="handlerDispatcher" class="com.rpg.framework.handler.dispatcher.executor.ServerHandlerExecutorDispatcher"></bean> 
-	
+		
+	<!-- 
+		<bean name="handlerDispatcher" class="com.rpg.framework.handler.dispatcher.ServerHandlerExecutorDispatcher"></bean> 
+	-->
 </beans>

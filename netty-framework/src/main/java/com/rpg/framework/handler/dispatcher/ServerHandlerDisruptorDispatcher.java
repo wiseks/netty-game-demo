@@ -1,20 +1,16 @@
 package com.rpg.framework.handler.dispatcher;
 
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.PostConstruct;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.dsl.ProducerType;
 import com.rpg.framework.code.Request;
 import com.rpg.framework.config.ServerConfig;
-import com.rpg.framework.handler.dispatcher.disruptor.event.DisruptorBossEventHandler;
-import com.rpg.framework.handler.dispatcher.disruptor.event.DisruptorEventFactory;
 import com.rpg.framework.session.AbstractUserSession;
 import com.rpg.framework.session.DisruptorUserSession;
 import com.rpg.framework.session.SessionHolder;
@@ -29,9 +25,7 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class ServerHandlerDisruptorDispatcher implements IHandlerDispatcher<Object>, DisposableBean {
 
-	@Autowired
-	private ServerConfig serverConfig;
-
+	private final Log log = LogFactory.getLog(this.getClass());
 
 	@Autowired
 	protected SessionHolder<Object> sessionHolder;
@@ -40,39 +34,25 @@ public class ServerHandlerDisruptorDispatcher implements IHandlerDispatcher<Obje
 
 	final AtomicInteger index = new AtomicInteger(1);
 
+	ThreadFactory factory = new ThreadFactory() {
 
-
-	private void publishEvent(DispatcherEvent event) {
-		final RingBuffer<DispatcherEvent> ringBuffer = disruptor.getRingBuffer();
-		long next = ringBuffer.next();
-		try {
-			DispatcherEvent commandEvent = ringBuffer.get(next);
-			commandEvent.setContext(event.getContext());
-			commandEvent.setRequest(event.getRequest());
-		} finally {
-			ringBuffer.publish(next);
+		@Override
+		public Thread newThread(Runnable r) {
+			return new Thread(null, r, "disruptor-worker-thread-" + index.getAndIncrement());
 		}
-	}
+	};
 
 	@Override
 	public void dispatch(Request command, ChannelHandlerContext context) {
-		DispatcherEvent event = new DispatcherEvent();
-		event.setContext(context);
-		event.setRequest(command);
-		this.publishEvent(event);
-	}
 
-	@PostConstruct
-	public void init() {
-		int bufferSize = serverConfig.getBufferSize();
-		disruptor = new Disruptor<>(new DisruptorEventFactory(), bufferSize, r -> {
-			AtomicInteger index = new AtomicInteger(1);
-			return new Thread(null, r, "disruptor-boss-thread-" + index.getAndIncrement());
-		}, ProducerType.MULTI, new YieldingWaitStrategy());
+		AbstractUserSession<Object> session = sessionHolder.get(context.channel());
+		if (session != null) {
+			DispatcherEvent event = new DispatcherEvent(context, command);
+			session.execute(event);
+		} else {
+			log.error("session is null,cmd=" + command.getCmd());
+		}
 
-		DisruptorBossEventHandler<Object> eventHandler = new DisruptorBossEventHandler<Object>( sessionHolder);
-		disruptor.handleEventsWith(eventHandler);
-		disruptor.start();
 	}
 
 	@Override
@@ -83,10 +63,12 @@ public class ServerHandlerDisruptorDispatcher implements IHandlerDispatcher<Obje
 	@Override
 	public void channelActive(ChannelHandlerContext channelContext, HandlerDispatcherMapping mapping,
 			SessionHolder<Object> sessionHolder, ServerConfig serverConfig) {
-		AbstractUserSession<Object> session =  sessionHolder.get(channelContext.channel());
-		if(session==null){
-			session = new DisruptorUserSession<Object>(channelContext,mapping,sessionHolder,serverConfig);
-			sessionHolder.put(session.getChannel(),session);
+		AbstractUserSession<Object> session = sessionHolder.get(channelContext.channel());
+		if (session == null) {
+			DisruptorUserSession<Object> session1 = new DisruptorUserSession<Object>(channelContext, mapping, sessionHolder, serverConfig);
+			session1.setFactory(factory);
+			session1.start();
+			sessionHolder.put(session1.getChannel(), session1);
 		}
 	}
 

@@ -1,5 +1,8 @@
 package com.rpg.framework.session;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.lmax.disruptor.RingBuffer;
@@ -24,17 +27,13 @@ public class DisruptorUserSession<K> extends AbstractUserSession<K> {
 	private Disruptor<DispatcherEvent> disruptor;
 	
 	
+	private ThreadFactory factory;
+	
+	
 	public DisruptorUserSession(ChannelHandlerContext channelContext,HandlerDispatcherMapping mapping, SessionHolder<K> sessionHolder,
 			ServerConfig serverConfig) {
+		
 		super(channelContext,mapping,serverConfig,sessionHolder);
-		disruptor = new Disruptor<>(new DisruptorEventFactory(), 256, r -> {
-			AtomicInteger index = new AtomicInteger(1);
-			return new Thread(null, r, "disruptor-worker-thread-" + index.getAndIncrement());
-		}, ProducerType.MULTI, new YieldingWaitStrategy());
-
-		DisruptorWorkerEventHandler<K> eventHandler = new DisruptorWorkerEventHandler<K>(mapping, sessionHolder, serverConfig);
-		disruptor.handleEventsWith(eventHandler);
-		disruptor.start();
 	}
 	
 	public void execute(DispatcherEvent event){
@@ -47,6 +46,19 @@ public class DisruptorUserSession<K> extends AbstractUserSession<K> {
 		} finally {
 			ringBuffer.publish(next);
 		}
+	}
+	
+	public void start(){
+		disruptor = new Disruptor<>(new DisruptorEventFactory(), 256, factory, ProducerType.MULTI, new YieldingWaitStrategy());
+
+		DisruptorWorkerEventHandler<K> eventHandler = new DisruptorWorkerEventHandler<K>(mapping, sessionHolder, serverConfig);
+		disruptor.handleEventsWith(eventHandler);
+		disruptor.start();
+	}
+	
+
+	public void setFactory(ThreadFactory factory) {
+		this.factory = factory;
 	}
 
 	@Override

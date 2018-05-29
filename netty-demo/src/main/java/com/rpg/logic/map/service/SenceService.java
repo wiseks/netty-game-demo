@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
@@ -30,8 +31,8 @@ public class SenceService {
 	@Autowired
 	private EventBus eventBus;
 	
-	private int a = 0;
-	private int b = 0;
+	private AtomicInteger a = new AtomicInteger(0);
+	private AtomicInteger b = new AtomicInteger(0);
 	
 	private ExecutorService service = Executors.newCachedThreadPool();
 	private Map<Integer,Sence> senceMap = new ConcurrentHashMap<Integer, Sence>();
@@ -48,8 +49,10 @@ public class SenceService {
 	}
 	
 	public void enterMap(Player player,int senceId){
-		b++;
-		System.out.println("b="+b);
+		int tmp = b.getAndIncrement();
+		if(tmp==0){
+			startTime = System.currentTimeMillis();
+		}
 //		int oldSenceId = player.getSenceId();
 //		Sence oldSence = senceMap.get(oldSenceId);
 //		if(oldSence!=null){
@@ -74,24 +77,24 @@ public class SenceService {
 	}
 	
 	public void move(Player player,int x,int y){
-		if(a==0){
+		int tmpA = a.getAndIncrement();
+		if(tmpA==0){
 			startTime = System.currentTimeMillis();
 		}
-		a ++;
 //		eventBus.post(new MyEvent(x, y, player.getPlayerId()));
 //		Sence sence = senceMap.get(player.getSenceId());
 //		if(sence!=null){
 //			PlayerMoveData data = new PlayerMoveData(player.getPlayerId(),x,y,sence.getSenceId());
 //			sence.move(data);
 //		}
-		System.out.println("》》》》》》》》》》》》》》》》》》》》》a="+a);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(a==3000000){
+//		System.out.println("》》》》》》》》》》》》》》》》》》》》》a="+a);
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		if(a.get()>=3000000){
 			System.out.println(System.currentTimeMillis()-startTime+",>>>>>>>>>>>>>a="+a);
 		}
 	}
