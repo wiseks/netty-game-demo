@@ -7,7 +7,8 @@ import org.apache.log4j.Logger;
 import com.rpg.framework.code.Decoder;
 import com.rpg.framework.code.Encoder;
 import com.rpg.framework.handler.ServerHandler;
-import com.rpg.framework.handler.ServerHandlerDispatcher;
+import com.rpg.framework.handler.dispatcher.IHandlerDispatcher;
+import com.rpg.framework.handler.dispatcher.executor.ServerHandlerExecutorDispatcher;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -23,7 +24,7 @@ public abstract class AbstractServer {
 	private NioEventLoopGroup workerGroup;
 	private NioEventLoopGroup bossGroup;
 
-	protected void bind(final InetSocketAddress address, final ServerHandlerDispatcher dispatcher,
+	protected void bind(final InetSocketAddress address, final IHandlerDispatcher dispatcher,
 			final ServerHandler<?> gameServerHandler) {
 
 		ServerBootstrap bootstrap = new ServerBootstrap();

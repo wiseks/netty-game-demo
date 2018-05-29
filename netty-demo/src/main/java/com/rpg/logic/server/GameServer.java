@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.rpg.framework.config.ServerConfig;
 import com.rpg.framework.handler.ServerHandler;
-import com.rpg.framework.handler.ServerHandlerDispatcher;
+import com.rpg.framework.handler.dispatcher.IHandlerDispatcher;
+import com.rpg.framework.handler.dispatcher.executor.ServerHandlerExecutorDispatcher;
 import com.rpg.framework.server.AbstractServer;
 
 
@@ -31,7 +32,7 @@ public class GameServer extends AbstractServer {
 
 
 	@Autowired
-	private ServerHandlerDispatcher dispatcher;
+	private IHandlerDispatcher dispatcher;
 
 	@PostConstruct
 	public void init() {

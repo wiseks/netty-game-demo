@@ -38,6 +38,8 @@ public class ServerConfig {
 	 * 綁定ip
 	 */
 	private Set<IpAddress> addresseSet = null;
+	
+	private int bufferSize = 128;
 
 	public void setAddresseSet(Set<IpAddress> addresseSet) {
 		this.addresseSet = addresseSet;
@@ -98,6 +100,10 @@ public class ServerConfig {
 
 	public void setMessageCount(int messageCount) {
 		this.messageCount = messageCount;
+	}
+
+	public int getBufferSize() {
+		return bufferSize;
 	}
 	
 

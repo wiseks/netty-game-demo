@@ -17,7 +17,7 @@ import com.google.protobuf.Message;
 import com.rpg.framework.code.Decoder;
 import com.rpg.framework.code.Encoder;
 import com.rpg.framework.code.Response;
-import com.rpg.framework.handler.ServerHandlerDispatcher;
+import com.rpg.framework.handler.dispatcher.executor.ServerHandlerExecutorDispatcher;
 import com.rpg.logic.server.ServerStart;
 
 import io.netty.bootstrap.Bootstrap;
@@ -55,8 +55,8 @@ public abstract class TestGame extends TestCase {
 		properties.load(new InputStreamReader(
 				ServerStart.class.getResourceAsStream("/game_resources/system.properties"), "UTF-8"));
 		System.setProperty("log4jdir", properties.getProperty("log4jdir"));
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application-test.xml");
-		ServerHandlerDispatcher dispatcher = context.getBean(ServerHandlerDispatcher.class);
+		//ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application-test.xml");
+		//ServerHandlerExecutorDispatcher dispatcher = context.getBean(ServerHandlerExecutorDispatcher.class);
 		// protobufMapping = new ProtobufMapping();
 		// protobufMapping.initialize();
 		// protobufMapping.init();
@@ -103,7 +103,7 @@ public abstract class TestGame extends TestCase {
 //				if(index.incrementAndGet()>=1000){
 //					futrue.channel().close();
 //				}
-				System.out.println(">>>>>>>>>>>>>>>"+res+","+index.incrementAndGet());
+//				System.out.println(">>>>>>>>>>>>>>>"+res+","+index.incrementAndGet());
 //				while (signal.get()) {
 //				}
 			}

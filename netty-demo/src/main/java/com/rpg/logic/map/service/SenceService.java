@@ -31,11 +31,12 @@ public class SenceService {
 	private EventBus eventBus;
 	
 	private int a = 0;
+	private int b = 0;
 	
 	private ExecutorService service = Executors.newCachedThreadPool();
 	private Map<Integer,Sence> senceMap = new ConcurrentHashMap<Integer, Sence>();
 	
-	
+	long startTime = 0;
 	
 	@PostConstruct
 	public void initSence(){
@@ -47,37 +48,51 @@ public class SenceService {
 	}
 	
 	public void enterMap(Player player,int senceId){
-		int oldSenceId = player.getSenceId();
-		Sence oldSence = senceMap.get(oldSenceId);
-		if(oldSence!=null){
-			if(senceId==oldSenceId){
-				if(!oldSence.isInSence(player.getPlayerId())){
-					oldSence.addPlayer(player);
-					return;
-				}else{
-					return;
-				}
-			}
-		}else{
-			return;
-		}
-		Sence sence = senceMap.get(senceId);
-		if(sence==null){
-			return;
-		}
-		System.out.println("playerId:"+player.getPlayerId()+"切换到场景:"+senceId);
-		oldSence.removePlayer(player.getPlayerId());
-		sence.addPlayer(player);
+		b++;
+		System.out.println("b="+b);
+//		int oldSenceId = player.getSenceId();
+//		Sence oldSence = senceMap.get(oldSenceId);
+//		if(oldSence!=null){
+//			if(senceId==oldSenceId){
+//				if(!oldSence.isInSence(player.getPlayerId())){
+//					oldSence.addPlayer(player);
+//					return;
+//				}else{
+//					return;
+//				}
+//			}
+//		}else{
+//			return;
+//		}
+//		Sence sence = senceMap.get(senceId);
+//		if(sence==null){
+//			return;
+//		}
+//		System.out.println("playerId:"+player.getPlayerId()+"切换到场景:"+senceId);
+//		oldSence.removePlayer(player.getPlayerId());
+//		sence.addPlayer(player);
 	}
 	
 	public void move(Player player,int x,int y){
+		if(a==0){
+			startTime = System.currentTimeMillis();
+		}
 		a ++;
-		System.out.println("playerId="+player.getPlayerId()+",move to,x="+x+",y="+y+",index="+a);
-		eventBus.post(new MyEvent(x, y, player.getPlayerId()));
-		Sence sence = senceMap.get(player.getSenceId());
-		if(sence!=null){
-			PlayerMoveData data = new PlayerMoveData(player.getPlayerId(),x,y,sence.getSenceId());
-			sence.move(data);
+//		eventBus.post(new MyEvent(x, y, player.getPlayerId()));
+//		Sence sence = senceMap.get(player.getSenceId());
+//		if(sence!=null){
+//			PlayerMoveData data = new PlayerMoveData(player.getPlayerId(),x,y,sence.getSenceId());
+//			sence.move(data);
+//		}
+		System.out.println("》》》》》》》》》》》》》》》》》》》》》a="+a);
+		try {
+			Thread.currentThread().sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(a==3000000){
+			System.out.println(System.currentTimeMillis()-startTime+",>>>>>>>>>>>>>a="+a);
 		}
 	}
 
