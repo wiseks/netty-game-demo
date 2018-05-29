@@ -8,13 +8,13 @@ package com.rpg.framework.session;
  */
 public class ChannelCloseEvent<K> {
 
-	private UserSession<K> session;
+	private AbstractUserSession<K> session;
 
-	public ChannelCloseEvent(UserSession<K> session) {
+	public ChannelCloseEvent(AbstractUserSession<K> session) {
 		this.session = session;
 	}
 
-	public UserSession<K> getSession() {
+	public AbstractUserSession<K> getSession() {
 		return session;
 	}
 

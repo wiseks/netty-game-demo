@@ -6,7 +6,7 @@ import com.rpg.framework.annotation.EventClass;
 import com.rpg.framework.annotation.EventMethod;
 import com.rpg.framework.annotation.MessageController;
 import com.rpg.framework.annotation.MessageRequest;
-import com.rpg.framework.session.UserSession;
+import com.rpg.framework.session.AbstractUserSession;
 import com.rpg.logic.map.service.SenceService;
 import com.rpg.logic.player.domain.Player;
 import com.rpg.logic.player.service.PlayerService;
@@ -25,13 +25,13 @@ public class SenceHandler {
 	private PlayerService playerService;
 	
 	@MessageRequest
-	public void move(UserSession<Integer> session,PlayerMoveNewReqMsg_13118 msg){
+	public void move(AbstractUserSession<Integer> session,PlayerMoveNewReqMsg_13118 msg){
 		Player player = playerService.getPlayer(session.getId());
 		senceService.move(player, msg.getX(), msg.getY());
 	}
 	
 	@MessageRequest
-	public void enterSence(UserSession<Integer> session,PlayerEnterSenceReqMsg_13119 msg){
+	public void enterSence(AbstractUserSession<Integer> session,PlayerEnterSenceReqMsg_13119 msg){
 		Player player = playerService.getPlayer(session.getId());
 		senceService.enterMap(player, msg.getSenceId());
 	}

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.rpg.framework.code.Response;
 import com.rpg.framework.session.SessionHolder;
-import com.rpg.framework.session.UserSession;
+import com.rpg.framework.session.AbstractUserSession;
+import com.rpg.framework.session.DisruptorUserSession;
 import com.rpg.logic.common.ErrorCode;
 import com.rpg.logic.map.service.SenceService;
 import com.rpg.logic.player.dao.PlayerDao;
@@ -77,7 +78,7 @@ public class PlayerService {
 		players.put(player.getPlayerId(), player);
 //		Attachment attachment = (Attachment)channelContext.getAttachment();
 //		attachment.setPlayerId(player.getPlayerId());
-		UserSession<Integer> userSession = sessionHolder.get(channelContext.channel());
+		AbstractUserSession<Integer> userSession = sessionHolder.get(channelContext.channel());
 		userSession.setId(player.getPlayerId());
 		sessionHolder.put(userSession.getId(),userSession);
 		player.setSessionHolder(sessionHolder);

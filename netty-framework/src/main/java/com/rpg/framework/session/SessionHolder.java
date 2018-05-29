@@ -21,9 +21,9 @@ public interface SessionHolder<K> {
 	 * @param userSession
 	 * @return
 	 */
-	public UserSession<K> put(K id,UserSession<K> userSession);
+	public AbstractUserSession<K> put(K id,AbstractUserSession<K> userSession);
 	
-	public UserSession<K> put(Channel channel,UserSession<K> userSession);
+	public AbstractUserSession<K> put(Channel channel,AbstractUserSession<K> userSession);
 
 	/**
 	 * 获取用户通道
@@ -31,11 +31,11 @@ public interface SessionHolder<K> {
 	 * @param playerId
 	 * @return
 	 */
-	public UserSession<K> get(K id);
+	public AbstractUserSession<K> get(K id);
 	
-	public UserSession<K> get(Channel channel);
+	public AbstractUserSession<K> get(Channel channel);
 	
-	public void removeChannel(UserSession<K> session);
+	public void removeChannel(AbstractUserSession<K> session);
 
 	/**
 	 * 移除一个用户

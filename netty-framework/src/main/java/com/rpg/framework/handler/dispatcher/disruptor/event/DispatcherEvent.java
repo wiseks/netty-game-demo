@@ -4,11 +4,23 @@ import com.rpg.framework.code.Request;
 
 import io.netty.channel.ChannelHandlerContext;
 
-public class DisruptorEvent {
+public class DispatcherEvent {
 	
 	private ChannelHandlerContext context;
 
 	private Request request;
+	
+
+	public DispatcherEvent() {
+		
+	}
+
+	public DispatcherEvent(ChannelHandlerContext context, Request request) {
+		this.context = context;
+		this.request = request;
+	}
+	
+	
 
 	public Request getRequest() {
 		return request;

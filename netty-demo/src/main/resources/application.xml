@@ -10,35 +10,28 @@
                         http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
                         http://www.springframework.org/schema/context
                         http://www.springframework.org/schema/context/spring-context-2.5.xsd">
-                        
-                        
-    <!-- 启用或关闭mybatis -->
-	<import resource="application-mybatis.xml"/>
-<!-- 
-	<context:component-scan base-package="com.cndw.dao.jade.core.cfg,xn">
-		<context:include-filter type="annotation"
-			expression="com.cndw.dao.jade.annotation.DAO" />
-		<context:include-filter type="regex"
-			expression=".*" />
 
-		<context:exclude-filter type="regex"
-			expression="xn.core.util.*" />
-		<context:exclude-filter type="regex"
-			expression="xn.core.command.*" />
 
-		<context:exclude-filter type="regex"
-			expression="xn.hero.*" />
-		<context:exclude-filter type="regex"
-			expression="xn.core.session.SessionHolder" />
-
-		<context:exclude-filter type="regex"
-			expression="xn.protobuf.*" />
-
-	</context:component-scan>
- -->
+	<!-- 启用或关闭mybatis -->
+	<import resource="application-mybatis.xml" />
+	<!-- <context:component-scan base-package="com.cndw.dao.jade.core.cfg,xn"> 
+		<context:include-filter type="annotation" expression="com.cndw.dao.jade.annotation.DAO" 
+		/> <context:include-filter type="regex" expression=".*" /> <context:exclude-filter 
+		type="regex" expression="xn.core.util.*" /> <context:exclude-filter type="regex" 
+		expression="xn.core.command.*" /> <context:exclude-filter type="regex" expression="xn.hero.*" 
+		/> <context:exclude-filter type="regex" expression="xn.core.session.SessionHolder" 
+		/> <context:exclude-filter type="regex" expression="xn.protobuf.*" /> </context:component-scan> -->
 	<context:component-scan base-package="com.rpg">
 		<context:include-filter type="annotation"
 			expression="com.rpg.framework.annotation.MessageController" />
 	</context:component-scan>
 
+	<!--  
+	<bean name="handlerDispatcher"
+		class="com.rpg.framework.handler.dispatcher.disruptor.ServerHandlerDisruptorDispatcher"></bean>
+		
+		-->
+	<!-- -->
+		<bean name="handlerDispatcher" class="com.rpg.framework.handler.dispatcher.executor.ServerHandlerExecutorDispatcher"></bean> 
+	
 </beans>

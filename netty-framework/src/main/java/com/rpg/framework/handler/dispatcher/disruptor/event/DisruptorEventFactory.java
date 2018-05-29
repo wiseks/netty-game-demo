@@ -7,11 +7,11 @@ import com.lmax.disruptor.EventFactory;
  * @author wudeji
  *
  */
-public class DisruptorEventFactory implements EventFactory<DisruptorEvent> {
+public class DisruptorEventFactory implements EventFactory<DispatcherEvent> {
 
 	@Override
-	public DisruptorEvent newInstance() {
-		return new DisruptorEvent();
+	public DispatcherEvent newInstance() {
+		return new DispatcherEvent();
 	}
 
 }

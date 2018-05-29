@@ -86,7 +86,7 @@ public class SenceService {
 //		}
 		System.out.println("》》》》》》》》》》》》》》》》》》》》》a="+a);
 		try {
-			Thread.currentThread().sleep(1000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,6 +106,7 @@ public class SenceService {
 				sence.removePlayer(playerId);
 			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>removePlayerId:"+playerId);
 		}
+		event.getSession().closeSession();
 	}
 
 	@EventMethod

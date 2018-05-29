@@ -22,7 +22,8 @@ import com.rpg.framework.annotation.MessageController;
 import com.rpg.framework.annotation.MessageRequest;
 import com.rpg.framework.config.ServerConfig;
 import com.rpg.framework.session.SessionHolder;
-import com.rpg.framework.session.UserSession;
+import com.rpg.framework.session.AbstractUserSession;
+import com.rpg.framework.session.DisruptorUserSession;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -90,7 +91,7 @@ public class HandlerDispatcherMapping {
 						log.warn("no login1...");
 						return false;
 					}else{
-						UserSession<Object> session = sessionHolder.get(context.channel());
+						AbstractUserSession<Object> session = sessionHolder.get(context.channel());
 						if(session.getId()==null){
 							context.channel().close();
 							log.warn("no login2...");

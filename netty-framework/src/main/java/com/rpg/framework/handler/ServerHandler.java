@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 import com.rpg.framework.annotation.EventClass;
 import com.rpg.framework.annotation.EventMethod;
 import com.rpg.framework.code.Request;
+import com.rpg.framework.config.ServerConfig;
+import com.rpg.framework.handler.dispatcher.HandlerDispatcherMapping;
 import com.rpg.framework.handler.dispatcher.IHandlerDispatcher;
 import com.rpg.framework.server.ServerStopEvent;
 import com.rpg.framework.session.SessionHolder;
-import com.rpg.framework.session.UserSession;
+import com.rpg.framework.session.AbstractUserSession;
+import com.rpg.framework.session.DisruptorUserSession;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -29,19 +32,22 @@ public class ServerHandler<K> extends ChannelInboundHandlerAdapter {
 
 	@Autowired
 	protected SessionHolder<K> sessionHolder;
+	
+	@Autowired
+	private HandlerDispatcherMapping mapping;
+	
+	@Autowired
+	private ServerConfig serverConfig;
+
 
 	private static volatile boolean SERVER_RUN = true;
 	
 	@Autowired
-	private IHandlerDispatcher handlerDispatcher;
+	private IHandlerDispatcher<K> handlerDispatcher;
 	
 	@Override
-	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		UserSession<K> session =  sessionHolder.get(ctx.channel());
-		if(session==null){
-			session = new UserSession<K>(ctx);
-			sessionHolder.put(session.getChannel(),session);
-		}
+	public void channelActive(ChannelHandlerContext channelContext) throws Exception {
+		handlerDispatcher.channelActive(channelContext, mapping, sessionHolder, serverConfig);
 	}
 	
 	@Override

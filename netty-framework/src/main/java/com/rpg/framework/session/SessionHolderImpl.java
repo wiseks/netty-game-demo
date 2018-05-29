@@ -35,9 +35,9 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 
 	private static final long SHOW_TIME = 30; // s
 
-	protected final ConcurrentMap<K, UserSession<K>> sessions = new ConcurrentHashMap<K, UserSession<K>>();
+	protected final ConcurrentMap<K, AbstractUserSession<K>> sessions = new ConcurrentHashMap<K, AbstractUserSession<K>>();
 
-	protected final ConcurrentHashMap<Channel, UserSession<K>> c2s = new ConcurrentHashMap<Channel, UserSession<K>>();
+	protected final ConcurrentHashMap<Channel, AbstractUserSession<K>> c2s = new ConcurrentHashMap<Channel, AbstractUserSession<K>>();
 
 	protected final ConcurrentSkipListSet<Long> loginIdSet = new ConcurrentSkipListSet<Long>();
 
@@ -80,27 +80,27 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 		}, 120, 120, TimeUnit.SECONDS);
 	}
 
-	public UserSession<K> put(K id, UserSession<K> userSession) {
+	public AbstractUserSession<K> put(K id, AbstractUserSession<K> userSession) {
 		sessions.putIfAbsent(userSession.getId(), userSession);
 		c2s.putIfAbsent(userSession.getChannel(), userSession);
 		return userSession;
 	}
 
-	public UserSession<K> put(Channel channel, UserSession<K> userSession) {
+	public AbstractUserSession<K> put(Channel channel, AbstractUserSession<K> userSession) {
 		c2s.putIfAbsent(userSession.getChannel(), userSession);
 		return userSession;
 	}
 
-	public UserSession<K> get(Channel channel) {
+	public AbstractUserSession<K> get(Channel channel) {
 		return c2s.get(channel);
 	}
 
-	public UserSession<K> get(K id) {
+	public AbstractUserSession<K> get(K id) {
 		return sessions.get(id);
 	}
 
 	public int remove(K id) {
-		UserSession<K> session = sessions.remove(id);
+		AbstractUserSession<K> session = sessions.remove(id);
 		if (session != null)
 			c2s.remove(session.getChannel());
 		return remove(session);
@@ -109,7 +109,7 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 	public synchronized int removeAll() {
 		int result = 0;
 		for (K key : sessions.keySet()) {
-			UserSession<K> session = sessions.get(key);
+			AbstractUserSession<K> session = sessions.get(key);
 			c2s.remove(session.getChannel());
 			sessions.remove(key);
 			result += remove(session);
@@ -117,7 +117,7 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 		return result;
 	}
 
-	private int remove(UserSession<K> session) {
+	private int remove(AbstractUserSession<K> session) {
 		try {
 			if (session != null) {
 				if (session.getChannel().isActive())
@@ -156,7 +156,7 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 	}
 
 	private void send(K id, Message message) {
-		UserSession<K> session = this.get(id);
+		AbstractUserSession<K> session = this.get(id);
 		if (session == null)
 			return;
 		try {
@@ -182,7 +182,7 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 	}
 
 	public void onChannelClose(ChannelHandlerContext ctx) {
-		UserSession<K> session = this.get(ctx.channel());
+		AbstractUserSession<K> session = this.get(ctx.channel());
 		if (session != null) {
 			K id = session.getId();
 			if(id!=null){
@@ -195,7 +195,7 @@ public class SessionHolderImpl<K> implements SessionHolder<K> {
 	}
 
 	@Override
-	public void removeChannel(UserSession<K> session) {
+	public void removeChannel(AbstractUserSession<K> session) {
 		this.c2s.remove(session.getChannel());
 	}
 

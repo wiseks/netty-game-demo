@@ -2,8 +2,6 @@ package com.rpg.framework.handler.dispatcher.disruptor.event;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.google.protobuf.Message;
 import com.lmax.disruptor.EventHandler;
@@ -12,9 +10,8 @@ import com.rpg.framework.code.Response;
 import com.rpg.framework.config.ServerConfig;
 import com.rpg.framework.handler.dispatcher.CommandHandlerHolder;
 import com.rpg.framework.handler.dispatcher.HandlerDispatcherMapping;
-import com.rpg.framework.handler.dispatcher.IHandlerDispatcher;
+import com.rpg.framework.session.AbstractUserSession;
 import com.rpg.framework.session.SessionHolder;
-import com.rpg.framework.session.UserSession;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -23,13 +20,11 @@ import io.netty.channel.ChannelHandlerContext;
  * @author wudeji
  *
  */
-public class DisruptorEventHandler implements EventHandler<DisruptorEvent> {
+public class DisruptorWorkerEventHandler<K> implements EventHandler<DispatcherEvent> {
 	
 	private final Log log = LogFactory.getLog(this.getClass());
-	
-	
 
-	public DisruptorEventHandler(HandlerDispatcherMapping mapping, SessionHolder<Object> sessionHolder,
+	public DisruptorWorkerEventHandler(HandlerDispatcherMapping mapping, SessionHolder<K> sessionHolder,
 			ServerConfig serverConfig) {
 		this.mapping = mapping;
 		this.sessionHolder = sessionHolder;
@@ -38,12 +33,12 @@ public class DisruptorEventHandler implements EventHandler<DisruptorEvent> {
 
 	private final HandlerDispatcherMapping mapping;
 	
-	protected final SessionHolder<Object> sessionHolder;
+	protected final SessionHolder<K> sessionHolder;
 	
 	private final ServerConfig serverConfig;
 	
 	@Override
-	public void onEvent(DisruptorEvent event, long sequence, boolean endOfBatch) throws Exception {
+	public void onEvent(DispatcherEvent event, long sequence, boolean endOfBatch) throws Exception {
 		Request command = event.getRequest();
 		ChannelHandlerContext context = event.getContext();
 		try {
@@ -57,17 +52,10 @@ public class DisruptorEventHandler implements EventHandler<DisruptorEvent> {
 				return;
 			}
 			CommandHandlerHolder holder = mapping.getHolder(msg.getClass());
-			UserSession<Object> session =  sessionHolder.get(context.channel());
+			AbstractUserSession<K> session =  sessionHolder.get(context.channel());
 			if(session==null){
 				context.channel().close();
 				log.error("session is null");
-				return;
-			}
-			int messageCount = session.incrementAndGet();
-			//System.out.println("messageCount:"+messageCount);
-			if(messageCount>serverConfig.getMessageCount()){
-				session.getChannel().close();
-				log.error("session message count is out of ["+serverConfig.getMessageCount()+"],current message count is:"+messageCount+",sessionId="+session.getId());
 				return;
 			}
 			try {

@@ -15,7 +15,8 @@ import com.rpg.framework.handler.dispatcher.CommandHandlerHolder;
 import com.rpg.framework.handler.dispatcher.HandlerDispatcherMapping;
 import com.rpg.framework.handler.dispatcher.IHandlerDispatcher;
 import com.rpg.framework.session.SessionHolder;
-import com.rpg.framework.session.UserSession;
+import com.rpg.framework.session.AbstractUserSession;
+import com.rpg.framework.session.DisruptorUserSession;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -24,7 +25,7 @@ import io.netty.channel.ChannelHandlerContext;
  * @author wudeji
  *
  */
-public class DisruptorConsumerEventHandler implements WorkHandler<DisruptorEvent> {
+public class DisruptorConsumerEventHandler implements WorkHandler<DispatcherEvent> {
 	
 	private final Log log = LogFactory.getLog(this.getClass());
 	
@@ -44,7 +45,7 @@ public class DisruptorConsumerEventHandler implements WorkHandler<DisruptorEvent
 	private final ServerConfig serverConfig;
 	
 	@Override
-	public void onEvent(DisruptorEvent event) throws Exception {
+	public void onEvent(DispatcherEvent event) throws Exception {
 		Request command = event.getRequest();
 		ChannelHandlerContext context = event.getContext();
 		try {
@@ -58,7 +59,7 @@ public class DisruptorConsumerEventHandler implements WorkHandler<DisruptorEvent
 				return;
 			}
 			CommandHandlerHolder holder = mapping.getHolder(msg.getClass());
-			UserSession<Object> session =  sessionHolder.get(context.channel());
+			AbstractUserSession<Object> session =  sessionHolder.get(context.channel());
 			if(session==null){
 				context.channel().close();
 				log.error("session is null");

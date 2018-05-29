@@ -6,7 +6,8 @@ import com.rpg.framework.annotation.MessageController;
 import com.rpg.framework.annotation.MessageRequest;
 import com.rpg.framework.code.Response;
 import com.rpg.framework.handler.dispatcher.IHandlerDispatcher;
-import com.rpg.framework.session.UserSession;
+import com.rpg.framework.session.AbstractUserSession;
+import com.rpg.framework.session.DisruptorUserSession;
 import com.rpg.logic.player.service.PlayerService;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -36,12 +37,12 @@ public class PlayerHandler {
 	}
 	
 	@MessageRequest(nocheck=true)
-	public Response login(ChannelHandlerContext channelContext,UserSession<Integer> session,PlayerLoginNewReqMsg_16013 msg){
+	public Response login(ChannelHandlerContext channelContext,AbstractUserSession<Integer> session,PlayerLoginNewReqMsg_16013 msg){
 		return playerService.login(channelContext, msg.getUser());
 	}
 	
 	@MessageRequest(nocheck=true)
-	public Response closeMsg(ChannelHandlerContext channelContext,UserSession<Integer> session,PlayerCloseReqMsg_16015 msg){
+	public Response closeMsg(ChannelHandlerContext channelContext,AbstractUserSession<Integer> session,PlayerCloseReqMsg_16015 msg){
 //		commandDispatcher.closeMsg(msg.getMsgName());
 		PlayerCloseReqMsg_16015.Builder res = PlayerCloseReqMsg_16015.newBuilder();
 		res.setMsgName(msg.getMsgName());
