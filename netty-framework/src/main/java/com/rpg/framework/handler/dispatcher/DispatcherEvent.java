@@ -1,4 +1,4 @@
-package com.rpg.framework.handler.dispatcher.disruptor.event;
+package com.rpg.framework.handler.dispatcher;
 
 import com.rpg.framework.code.Request;
 

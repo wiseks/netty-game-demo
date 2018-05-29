@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.rpg.framework.config.ServerConfig;
 import com.rpg.framework.handler.ServerHandler;
 import com.rpg.framework.handler.dispatcher.IHandlerDispatcher;
-import com.rpg.framework.handler.dispatcher.executor.ServerHandlerExecutorDispatcher;
+import com.rpg.framework.handler.dispatcher.ServerHandlerExecutorDispatcher;
 import com.rpg.framework.server.AbstractServer;
 
 

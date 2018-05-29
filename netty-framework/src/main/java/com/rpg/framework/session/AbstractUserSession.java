@@ -3,8 +3,8 @@ package com.rpg.framework.session;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.rpg.framework.config.ServerConfig;
+import com.rpg.framework.handler.dispatcher.DispatcherEvent;
 import com.rpg.framework.handler.dispatcher.HandlerDispatcherMapping;
-import com.rpg.framework.handler.dispatcher.disruptor.event.DispatcherEvent;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

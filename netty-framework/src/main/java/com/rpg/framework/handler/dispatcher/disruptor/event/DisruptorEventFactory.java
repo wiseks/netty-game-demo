@@ -1,6 +1,7 @@
 package com.rpg.framework.handler.dispatcher.disruptor.event;
 
 import com.lmax.disruptor.EventFactory;
+import com.rpg.framework.handler.dispatcher.DispatcherEvent;
 
 /**
  * DisruptorEventFactory

@@ -10,8 +10,8 @@ import com.google.protobuf.Message;
 import com.rpg.framework.code.Response;
 import com.rpg.framework.config.ServerConfig;
 import com.rpg.framework.handler.dispatcher.CommandHandlerHolder;
+import com.rpg.framework.handler.dispatcher.DispatcherEvent;
 import com.rpg.framework.handler.dispatcher.HandlerDispatcherMapping;
-import com.rpg.framework.handler.dispatcher.disruptor.event.DispatcherEvent;
 
 import io.netty.channel.ChannelHandlerContext;
 
