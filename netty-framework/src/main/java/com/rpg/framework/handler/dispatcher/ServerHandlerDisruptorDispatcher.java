@@ -1,5 +1,7 @@
 package com.rpg.framework.handler.dispatcher;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,6 +40,7 @@ public class ServerHandlerDisruptorDispatcher implements IHandlerDispatcher<Obje
 
 		@Override
 		public Thread newThread(Runnable r) {
+			ExecutorService service = Executors.newScheduledThreadPool(10);
 			return new Thread(null, r, "disruptor-worker-thread-" + index.getAndIncrement());
 		}
 	};

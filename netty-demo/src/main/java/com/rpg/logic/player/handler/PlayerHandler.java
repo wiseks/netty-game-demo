@@ -20,7 +20,7 @@ import xn.protobuf.player.PlayerMsg.PlayerLoginNewReqMsg_16013;
 public class PlayerHandler {
 
 	@Autowired
-	private PlayerService playerService;
+	protected PlayerService playerService;
 	
 //	@Autowired
 //	private IHandlerDispatcher commandDispatcher;

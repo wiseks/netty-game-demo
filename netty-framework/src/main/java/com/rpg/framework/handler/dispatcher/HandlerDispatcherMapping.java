@@ -1,5 +1,6 @@
 package com.rpg.framework.handler.dispatcher;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -113,20 +114,60 @@ public class HandlerDispatcherMapping {
 		
 		// 从sping上下文取出所有消息处理器
 		Map<String, Object> handlerMap = applicationContext.getBeansWithAnnotation(MessageController.class);
-
 		for (Object obj : handlerMap.values()) {
 			Class<?> clazz = obj.getClass();
+			System.out.println(">>>>>>>>>>>>>>>clazz>>>>>>>>>>>>>>>>"+clazz);
+			ProxyFactory proxyFactory = new ProxyFactory();
+			Object proxyObj = proxyFactory.getProxyInstance(clazz);
+			
+			Class<?> clazz2 = proxyObj.getClass();
+			Field[] fs = obj.getClass().getDeclaredFields();
+			Field[] proxyFs = proxyObj.getClass().getSuperclass().getDeclaredFields();
+			for(Field f : fs){
+				try {
+					f.setAccessible(true);
+					String name = f.getName();
+					for(Field proxyF : proxyFs){
+						proxyF.setAccessible(true);
+						String proxyFname = proxyF.getName();
+						System.out.println(proxyFname);
+						 Object o = applicationContext.getBean(f.getType());
+						 System.out.println(o);
+						if(name.equals(proxyFname)){
+							proxyF.set(proxyObj, applicationContext.getBean(f.getType()));
+							break;
+						}
+					}
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+			
 
 			//final Class<?> userType = ClassUtils.getUserClass(obj.getClass());
 
 			// 找到所有处理方法
 			Method[] methods = clazz.getMethods();
+//			Method[] methods = clazz2.getMethods();
+			Map<String,Method> map = new HashMap<>();
 			for (Method method : methods) {
 				// 判断处理方法是否符合要求
 				MessageRequest cmd = method.getAnnotation(MessageRequest.class);
 				Class<?>[] paramTypes = method.getParameterTypes();
 				if (cmd == null || paramTypes.length == 0) {
 					continue;
+				}
+				//System.out.println(clazz.getSimpleName()+","+method.getName());
+				for(Method m : clazz2.getMethods()){
+					if(m.getName().equals(method.getName())){
+						System.out.println(">>>>>>>>>>"+m.getName());
+						map.put(m.getName(), m);
+						break;
+					}
 				}
 				for(Class<?> paramType : paramTypes){
 					if(paramType.getSuperclass()!=null){
@@ -148,7 +189,8 @@ public class HandlerDispatcherMapping {
 									cmd2Message.put(shortCmd, messageLite);
 									messageClass2Cmd.put(clazz, shortCmd);
 									int paramSize = paramTypes.length;
-									CommandHandlerHolder holder = new CommandHandlerHolder(obj, method, paramSize, cmd);
+									Method proxyMethod = map.get(method.getName());
+									CommandHandlerHolder holder = new CommandHandlerHolder(proxyObj, proxyMethod, paramSize, cmd);
 									handlers.put(clazz1, holder);
 									handlerCloses.put(clazz1.getSimpleName(), false);
 									
