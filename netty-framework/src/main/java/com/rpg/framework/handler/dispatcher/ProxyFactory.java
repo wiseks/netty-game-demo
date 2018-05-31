@@ -1,10 +1,13 @@
 package com.rpg.framework.handler.dispatcher;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
+
+import com.rpg.framework.annotation.MessageRequest;
 
 public class ProxyFactory implements MethodInterceptor {
 
@@ -27,6 +30,8 @@ public class ProxyFactory implements MethodInterceptor {
 	public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 		System.out.println("开始事务...");
 
+		MessageRequest req = method.getAnnotation(MessageRequest.class);
+		System.out.println(req);
 		// 执行目标对象的方法
 		Object returnValue = proxy.invokeSuper(obj, args);
 
