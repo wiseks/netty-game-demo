@@ -29,14 +29,12 @@ public class DisruptorWorkerEventHandler<K> implements EventHandler<DispatcherEv
 			ServerConfig serverConfig) {
 		this.mapping = mapping;
 		this.sessionHolder = sessionHolder;
-		this.serverConfig = serverConfig;
 	}
 
 	private final HandlerDispatcherMapping mapping;
 	
 	protected final SessionHolder<K> sessionHolder;
 	
-	private final ServerConfig serverConfig;
 	
 	@Override
 	public void onEvent(DispatcherEvent event, long sequence, boolean endOfBatch) throws Exception {

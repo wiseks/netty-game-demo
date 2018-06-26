@@ -77,11 +77,11 @@ public class SenceService {
 	}
 	
 	public void move(Player player,int x,int y){
-		int tmpA = a.getAndIncrement();
-		if(tmpA==0){
-			startTime = System.currentTimeMillis();
-		}
-//		eventBus.post(new MyEvent(x, y, player.getPlayerId()));
+//		int tmpA = a.getAndIncrement();
+//		if(tmpA==0){
+//			startTime = System.currentTimeMillis();
+//		}
+		eventBus.post(new MyEvent(x, y, player.getPlayerId()));
 //		Sence sence = senceMap.get(player.getSenceId());
 //		if(sence!=null){
 //			PlayerMoveData data = new PlayerMoveData(player.getPlayerId(),x,y,sence.getSenceId());
@@ -94,9 +94,9 @@ public class SenceService {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		if(a.get()>=3000000){
-			System.out.println(System.currentTimeMillis()-startTime+",>>>>>>>>>>>>>a="+a);
-		}
+//		if(a.get()>=3000000){
+//			System.out.println(System.currentTimeMillis()-startTime+",>>>>>>>>>>>>>a="+a);
+//		}
 	}
 
 	@EventMethod
@@ -114,7 +114,7 @@ public class SenceService {
 
 	@EventMethod
 	private void processEvent1(MyEvent e){
-		System.out.println("event11111:"+e.getPlayerId()+","+e.getX()+","+e.getY());
+		//System.out.println("event11111:"+e.getPlayerId()+","+e.getX()+","+e.getY());
 	}
 	
 }

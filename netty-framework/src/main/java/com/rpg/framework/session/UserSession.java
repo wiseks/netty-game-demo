@@ -1,12 +1,18 @@
 package com.rpg.framework.session;
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 
+import com.google.gson.JsonObject;
 import com.google.protobuf.Message;
+import com.rabbitmq.tools.json.JSONUtil;
 import com.rpg.framework.code.Response;
 import com.rpg.framework.config.ServerConfig;
 import com.rpg.framework.handler.dispatcher.CommandHandlerHolder;
@@ -23,6 +29,23 @@ public class UserSession<K> extends AbstractUserSession<K> {
 	private final Log log = LogFactory.getLog(this.getClass());
 
 	private Lock lock = new ReentrantLock();
+	
+	private LinkedList<DispatcherEvent> messages = new LinkedList<>();
+	
+	public void addMessage(DispatcherEvent msg){
+		Message msg1 = mapping.message(msg.getRequest().getCmd(), msg.getRequest().getBytes());
+		System.out.println(msg1);
+		messages.addLast(msg);
+	}
+	
+	
+	public DispatcherEvent remove(){
+		DispatcherEvent msg =  messages.removeFirst();
+		Message msg1 = mapping.message(msg.getRequest().getCmd(), msg.getRequest().getBytes());
+		System.out.println(">>>>>>>>"+msg1);
+		System.out.println(messages.size()+"???????????????????????");
+		return msg;
+	}
 
 
 	public UserSession(ChannelHandlerContext channelContext, HandlerDispatcherMapping mapping,
@@ -50,7 +73,7 @@ public class UserSession<K> extends AbstractUserSession<K> {
 		CommandHandlerHolder holder = mapping.getHolder(msg.getClass());
 		long starttime = System.currentTimeMillis();
 		try {
-			lock.lock();
+			//lock.lock();
 			if (null != channelContext && channelContext.channel().isActive()) {
 				Object returnValue = null;
 				if (holder.getParamSize() == 1)
@@ -71,8 +94,8 @@ public class UserSession<K> extends AbstractUserSession<K> {
 		} catch (Exception e) {
 			log.error("ERROR|Dispatcher method error occur. head:" + event.getRequest().getCmd(), e);
 		} finally {
-			if (lock != null)
-				lock.unlock();
+			//if (lock != null)
+				//lock.unlock();
 		}
 
 		long endtime = System.currentTimeMillis();

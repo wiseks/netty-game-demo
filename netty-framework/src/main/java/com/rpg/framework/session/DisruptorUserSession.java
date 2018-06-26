@@ -1,9 +1,6 @@
 package com.rpg.framework.session;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -48,22 +45,27 @@ public class DisruptorUserSession<K> extends AbstractUserSession<K> {
 		}
 	}
 	
-	public void start(){
-		disruptor = new Disruptor<>(new DisruptorEventFactory(), 256, factory, ProducerType.MULTI, new YieldingWaitStrategy());
-
-		DisruptorWorkerEventHandler<K> eventHandler = new DisruptorWorkerEventHandler<K>(mapping, sessionHolder, serverConfig);
-		disruptor.handleEventsWith(eventHandler);
-		disruptor.start();
-	}
+//	public void start(){
+//		disruptor = new Disruptor<>(new DisruptorEventFactory(), 256, factory, ProducerType.MULTI, new YieldingWaitStrategy());
+//
+//		DisruptorWorkerEventHandler<K> eventHandler = new DisruptorWorkerEventHandler<K>(mapping, sessionHolder, serverConfig);
+//		disruptor.handleEventsWith(eventHandler);
+//		disruptor.start();
+//	}
+//	
+//
+//	public void setFactory(ThreadFactory factory) {
+//		this.factory = factory;
+//	}
 	
-
-	public void setFactory(ThreadFactory factory) {
-		this.factory = factory;
-	}
 
 	@Override
 	public void closeSession() {
 		disruptor.shutdown();
+	}
+
+	public void setDisruptor(Disruptor<DispatcherEvent> disruptor) {
+		this.disruptor = disruptor;
 	}
 	
 }

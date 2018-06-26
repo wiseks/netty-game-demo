@@ -75,11 +75,11 @@ public class PlayerService {
 		if(player==null){
 			return Response.createErrResponse(res.build());
 		}
-		players.put(player.getPlayerId(), player);
 //		Attachment attachment = (Attachment)channelContext.getAttachment();
 //		attachment.setPlayerId(player.getPlayerId());
 		AbstractUserSession<Integer> userSession = sessionHolder.get(channelContext.channel());
-		userSession.setId(player.getPlayerId());
+//		userSession.setId(player.getPlayerId());
+		players.put(userSession.getId(), player);
 		sessionHolder.put(userSession.getId(),userSession);
 		player.setSessionHolder(sessionHolder);
 		senceService.enterMap(player, 1001);
