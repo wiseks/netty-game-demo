@@ -17,7 +17,7 @@ public class PlayerTest extends TestGame {
 	
 	public void testLogin(){
 		PlayerLoginNewReqMsg_16013.Builder req = PlayerLoginNewReqMsg_16013.newBuilder();
-		req.setUser("test4");
+		req.setUser("test1");
 		this.sendMsg(req.build());
 		try {
 			Thread.sleep(1000);
@@ -25,7 +25,7 @@ public class PlayerTest extends TestGame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for(int i=0;i<10000000;i++){
+		for(int i=0;i<100;i++){
 //			if(i%2==0){
 //				PlayerEnterSenceReqMsg_13119.Builder msg1 = PlayerEnterSenceReqMsg_13119.newBuilder();
 //				msg1.setSenceId(1);

@@ -7,7 +7,7 @@ import com.rpg.logic.player.domain.Player;
 
 public interface PlayerDao {
 
-	@Insert(" insert into Player(playerId,name,user,senceId) values (#{playerId},#{name},#{user},#{senceId}) ")
+	@Insert(" insert into Player(playerId,name,user,senceId) values (null,#{name},#{user},#{senceId}) ")
 	public int createPlayer(Player player);
 	
 	@Select("select * from Player where user=#{user}")

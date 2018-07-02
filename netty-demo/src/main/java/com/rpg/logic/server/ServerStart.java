@@ -6,13 +6,24 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.rpg.framework.event.EventBus;
 import com.rpg.framework.server.ServerStopEvent;
 import com.rpg.logic.utils.PlayerNameUtil;
 
 
+@SpringBootApplication
+@EnableScheduling
+@EnableTransactionManagement
+@MapperScan("com.rpg.logic.player.dao")
+//@ImportResource("classpath:application.xml")
 public class ServerStart {
 	
 	private final Log log = LogFactory.getLog(this.getClass());
@@ -21,6 +32,10 @@ public class ServerStart {
 
 	private ClassPathXmlApplicationContext context;
 
+//	public static void main(String[] args) {
+//		SpringApplication.run(ServerStart.class, args);
+//	}
+	
 	public static void main(String[] args) {
 		ServerStart server = new ServerStart();
 		try {

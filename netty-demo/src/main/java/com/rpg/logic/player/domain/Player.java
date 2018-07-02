@@ -1,5 +1,6 @@
 package com.rpg.logic.player.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import com.google.protobuf.Message;
 import com.rpg.framework.session.SessionHolder;
 import com.rpg.logic.map.dto.PlayerMoveData;
 
-public class Player {
+public class Player implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private int playerId;
 	
@@ -17,13 +20,13 @@ public class Player {
 	
 	private int senceId;
 	
-	private SessionHolder sessionHolder;
+	//private SessionHolder sessionHolder;
 	
 	private List<PlayerMoveData> moveDate = new ArrayList<PlayerMoveData>();
 
-	public void sendMsg(Message message){
-		sessionHolder.sendMsg(playerId, message);
-	}
+//	public void sendMsg(Message message){
+//		sessionHolder.sendMsg(playerId, message);
+//	}
 
 	public int getPlayerId() {
 		return playerId;
@@ -49,9 +52,9 @@ public class Player {
 		this.user = user;
 	}
 
-	public void setSessionHolder(SessionHolder sessionHolder) {
-		this.sessionHolder = sessionHolder;
-	}
+//	public void setSessionHolder(SessionHolder sessionHolder) {
+//		this.sessionHolder = sessionHolder;
+//	}
 
 	public int getSenceId() {
 		return senceId;

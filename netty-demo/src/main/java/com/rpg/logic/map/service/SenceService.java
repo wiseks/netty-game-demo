@@ -1,6 +1,7 @@
 package com.rpg.logic.map.service;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,14 +12,23 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.Disruptor;
 import com.rpg.framework.annotation.EventClass;
 import com.rpg.framework.annotation.EventMethod;
+import com.rpg.framework.enums.SQLType;
 import com.rpg.framework.event.EventBus;
 import com.rpg.framework.session.ChannelCloseEvent;
+import com.rpg.logic.config.disruptor.event.DisruptorDto;
+import com.rpg.logic.config.disruptor.event.DisruptorEvent;
+import com.rpg.logic.config.disruptor.event.DisruptorEventTranslator;
 import com.rpg.logic.map.domain.Sence;
 import com.rpg.logic.map.dto.PlayerMoveData;
 import com.rpg.logic.map.handler.MyEvent;
+import com.rpg.logic.player.dao.PlayerDao;
 import com.rpg.logic.player.domain.Player;
+import com.rpg.logic.player.repository.MythInvocation;
+import com.rpg.logic.player.repository.PlayerRepository;
 import com.rpg.logic.player.service.PlayerService;
 
 @Service
@@ -31,7 +41,14 @@ public class SenceService {
 	@Autowired
 	private EventBus eventBus;
 	
-	private AtomicInteger a = new AtomicInteger(0);
+	@Autowired
+	private PlayerRepository playerRepository;
+	
+	@Autowired
+	private Receiver r;
+	
+	
+	private AtomicInteger a = new AtomicInteger(10);
 	private AtomicInteger b = new AtomicInteger(0);
 	
 	private ExecutorService service = Executors.newCachedThreadPool();
@@ -81,7 +98,7 @@ public class SenceService {
 //		if(tmpA==0){
 //			startTime = System.currentTimeMillis();
 //		}
-		eventBus.post(new MyEvent(x, y, player.getPlayerId()));
+		//eventBus.post(new MyEvent(x, y, player.getPlayerId()));
 //		Sence sence = senceMap.get(player.getSenceId());
 //		if(sence!=null){
 //			PlayerMoveData data = new PlayerMoveData(player.getPlayerId(),x,y,sence.getSenceId());
@@ -97,6 +114,17 @@ public class SenceService {
 //		if(a.get()>=3000000){
 //			System.out.println(System.currentTimeMillis()-startTime+",>>>>>>>>>>>>>a="+a);
 //		}
+		Player p = new Player();
+		UUID uid = UUID.randomUUID();
+		p.setName("test"+uid.toString());
+		p.setSenceId(1);
+		p.setUser("test"+uid.toString());
+		Object[] args  = new Object[1];
+		Class<?>[] args1 = new Class[1];
+		args[0] = p;
+		args1[0] = Player.class;
+		MythInvocation dto = new MythInvocation(PlayerDao.class,"createPlayer",args1,args);
+		playerRepository.update(dto);
 	}
 
 	@EventMethod

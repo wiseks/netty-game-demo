@@ -72,7 +72,7 @@ public class Sence implements Runnable {
 		MapPlayerDataOutResMsg_13104.Builder res = MapPlayerDataOutResMsg_13104.newBuilder();
 		res.setPlayerId(playerId);
 		for(Player player : playerMap.values()){
-			player.sendMsg(res.build());
+			//player.sendMsg(res.build());
 		}
 	}
 	
@@ -107,7 +107,7 @@ public class Sence implements Runnable {
 						bigData.addDataList(data.build());
 					}
 					res.setData(bigData.build());
-					player.sendMsg(res.build());
+					//player.sendMsg(res.build());
 					System.out.println(">>>>>>>>>>>>"+res.build());
 					player.getMoveDate().clear();
 				}
@@ -133,7 +133,7 @@ public class Sence implements Runnable {
 			MonsterDataNew data = monsters.get(key);
 					res.addMonster(data);
 		}
-		player.sendMsg(res.build());
+		//player.sendMsg(res.build());
 	}
 	
 }

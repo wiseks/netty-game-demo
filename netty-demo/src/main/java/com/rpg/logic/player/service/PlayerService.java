@@ -81,7 +81,7 @@ public class PlayerService {
 //		userSession.setId(player.getPlayerId());
 		players.put(userSession.getId(), player);
 		sessionHolder.put(userSession.getId(),userSession);
-		player.setSessionHolder(sessionHolder);
+//		player.setSessionHolder(sessionHolder);
 		senceService.enterMap(player, 1001);
 		res.setPlayerData(this.createPlayerData(player));
 		System.out.println("player login,id="+player.getPlayerId()+",name="+player.getName());
