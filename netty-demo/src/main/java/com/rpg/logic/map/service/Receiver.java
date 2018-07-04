@@ -43,7 +43,7 @@ public class Receiver {
             }
         }
         if(mh!=null){
-        	ReflectionUtils.invokeMethod(mh, bean, my.getArgs());
+//        	ReflectionUtils.invokeMethod(mh, bean, my.getArgs());
         }
 //        my.getClass().getp
     }

@@ -22,7 +22,7 @@ public class MythInvocation implements Serializable {
 	public MythInvocation() {
 	}
 
-	public MythInvocation(Class<?> clazz, String name, Class<?>[] args2, Object[] arguments) {
+	public MythInvocation(Class<?> clazz, String name, Class<?>[] args2, Object ... arguments) {
 		this.targetClass = clazz;
 		this.methodName = name;
 		this.parameterTypes = args2;
