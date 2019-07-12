@@ -23,7 +23,7 @@ public abstract class AbstractServer {
 	private NioEventLoopGroup workerGroup;
 	private NioEventLoopGroup bossGroup;
 
-	protected void bind(final InetSocketAddress address, final IHandlerDispatcher dispatcher,
+	protected void bind(final InetSocketAddress address, final IHandlerDispatcher<?> dispatcher,
 			final ServerHandler<?> gameServerHandler) {
 
 		ServerBootstrap bootstrap = new ServerBootstrap();

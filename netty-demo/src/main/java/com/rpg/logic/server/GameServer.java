@@ -31,7 +31,7 @@ public class GameServer extends AbstractServer {
 
 
 	@Autowired
-	private IHandlerDispatcher dispatcher;
+	private IHandlerDispatcher<?> dispatcher;
 
 	@PostConstruct
 	public void init() {
