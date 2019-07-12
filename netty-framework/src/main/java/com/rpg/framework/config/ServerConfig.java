@@ -17,6 +17,9 @@ public class ServerConfig {
 	 */
 	private int messageCount = 300;
 
+	/**
+	 * 线程数量
+	 */
 	private int threadNum = 500;
 
 	/**

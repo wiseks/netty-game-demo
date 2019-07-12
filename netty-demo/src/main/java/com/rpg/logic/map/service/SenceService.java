@@ -51,6 +51,8 @@ public class SenceService {
 	private AtomicInteger a = new AtomicInteger(10);
 	private AtomicInteger b = new AtomicInteger(0);
 	
+	private ExecutorService[] executors;
+	
 	private ExecutorService service = Executors.newCachedThreadPool();
 	private Map<Integer,Sence> senceMap = new ConcurrentHashMap<Integer, Sence>();
 	
@@ -58,6 +60,14 @@ public class SenceService {
 	
 	@PostConstruct
 	public void initSence(){
+		
+		executors = new ExecutorService[8];
+		
+		for (int i=0;i<8;i++) {
+			ExecutorService executorService = Executors.newSingleThreadExecutor();
+			executors[i] = executorService;
+		}
+		
 		for(int i=1001;i<=1010;i++){
 			Sence sence = new Sence(i);
 			service.execute(sence);
