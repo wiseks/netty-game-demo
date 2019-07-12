@@ -5,22 +5,19 @@ import com.rpg.framework.code.Request;
 import io.netty.channel.ChannelHandlerContext;
 
 public class DispatcherEvent {
-	
+
 	private ChannelHandlerContext context;
 
 	private Request request;
-	
 
 	public DispatcherEvent() {
-		
+
 	}
 
 	public DispatcherEvent(ChannelHandlerContext context, Request request) {
 		this.context = context;
 		this.request = request;
 	}
-	
-	
 
 	public Request getRequest() {
 		return request;
@@ -37,5 +34,5 @@ public class DispatcherEvent {
 	public void setContext(ChannelHandlerContext context) {
 		this.context = context;
 	}
-	
+
 }
