@@ -1,12 +1,10 @@
 package com.rpg.framework.handler.dispatcher;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
@@ -22,9 +20,8 @@ import com.google.protobuf.Message;
 import com.rpg.framework.annotation.MessageController;
 import com.rpg.framework.annotation.MessageRequest;
 import com.rpg.framework.config.ServerConfig;
-import com.rpg.framework.session.SessionHolder;
 import com.rpg.framework.session.AbstractUserSession;
-import com.rpg.framework.session.DisruptorUserSession;
+import com.rpg.framework.session.SessionHolder;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -116,8 +113,6 @@ public class HandlerDispatcherMapping {
 		Map<String, Object> handlerMap = applicationContext.getBeansWithAnnotation(MessageController.class);
 		for (Object obj : handlerMap.values()) {
 			Class<?> clazz = obj.getClass();
-			
-
 
 			// 找到所有处理方法
 			Method[] methods = clazz.getMethods();
@@ -132,38 +127,42 @@ public class HandlerDispatcherMapping {
 				}
 				map.put(method.getName(), method);
 				for(Class<?> paramType : paramTypes){
-					if(paramType.getSuperclass()!=null){
-						if(paramType.getSuperclass().getSimpleName().equals("GeneratedMessage")){
-							String className = paramType.getName();
-							try {
-								Class<?> clazz1 = ClassUtils.forName(className, ClassUtils.getDefaultClassLoader());
-								Method getDefaultInstance = ReflectionUtils.findMethod(clazz1, "getDefaultInstance");
-								if (getDefaultInstance != null) {
-									String[] params = className.split("_");
-									Short shortCmd = Short.valueOf(params[1]);
-									Message existMessage = cmd2Message.get(shortCmd);
-									if (existMessage != null) {
-										throw new IllegalStateException(String.format("Ambiguous message found. "
-												+ "Cannot map message: %s onto: %s, There is already message: %s mapped", clazz,
-												shortCmd, existMessage.getClass()));
-									}
-									Message messageLite = (Message) ReflectionUtils.invokeMethod(getDefaultInstance, null);
-									cmd2Message.put(shortCmd, messageLite);
-									messageClass2Cmd.put(clazz, shortCmd);
-									int paramSize = paramTypes.length;
-									CommandHandlerHolder holder = new CommandHandlerHolder(obj, method, paramSize, cmd);
-									handlers.put(clazz1, holder);
-									handlerCloses.put(clazz1.getSimpleName(), false);
-									
-									log.info(("START|Init HandlerMethod: " + clazz.getSimpleName() + " --> " + method.getName()
-									+ " --> cmd:" + className));
-								}
-							} catch (ClassNotFoundException e) {
-								e.printStackTrace();
-							} catch (LinkageError e) {
-								e.printStackTrace();
+					if (paramType.getSuperclass() == null) {
+						continue;
+					}
+					
+					if (!paramType.getSuperclass().getSimpleName().equals("GeneratedMessage")){
+						continue;
+					}
+					
+					String className = paramType.getName();
+					try {
+						Class<?> clazz1 = ClassUtils.forName(className, ClassUtils.getDefaultClassLoader());
+						Method getDefaultInstance = ReflectionUtils.findMethod(clazz1, "getDefaultInstance");
+						if (getDefaultInstance != null) {
+							String[] params = className.split("_");
+							Short shortCmd = Short.valueOf(params[1]);
+							Message existMessage = cmd2Message.get(shortCmd);
+							if (existMessage != null) {
+								throw new IllegalStateException(String.format("Ambiguous message found. "
+										+ "Cannot map message: %s onto: %s, There is already message: %s mapped", clazz,
+										shortCmd, existMessage.getClass()));
 							}
+							Message messageLite = (Message) ReflectionUtils.invokeMethod(getDefaultInstance, null);
+							cmd2Message.put(shortCmd, messageLite);
+							messageClass2Cmd.put(clazz, shortCmd);
+							int paramSize = paramTypes.length;
+							CommandHandlerHolder holder = new CommandHandlerHolder(obj, method, paramSize, cmd);
+							handlers.put(clazz1, holder);
+							handlerCloses.put(clazz1.getSimpleName(), false);
+							
+							log.info(("START|Init HandlerMethod: " + clazz.getSimpleName() + " --> " + method.getName()
+							+ " --> cmd:" + className));
 						}
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (LinkageError e) {
+						e.printStackTrace();
 					}
 					
 				}

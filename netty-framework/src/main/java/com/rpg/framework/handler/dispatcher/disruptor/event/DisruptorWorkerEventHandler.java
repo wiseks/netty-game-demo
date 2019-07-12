@@ -57,6 +57,14 @@ public class DisruptorWorkerEventHandler<K> implements EventHandler<DispatcherEv
 				log.error("session is null");
 				return;
 			}
+			
+			int msgCount = session.incrementAndGet();
+			if (msgCount > 500) {
+				context.channel().close();
+				log.error("msg is full");
+				return;
+			}
+			
 			try {
 				command.setCtx(context);
 				if (null != context && context.channel().isActive()) {
